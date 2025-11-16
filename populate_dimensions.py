@@ -9,6 +9,7 @@ import mysql.connector
 import csv
 import getpass
 from mysql.connector import errorcode
+import argparse
 
 # --- File paths ---
 CUSTOMER_MASTER_FILE = 'customer_master_data.csv'
@@ -212,34 +213,50 @@ def main():
     conn = None
     cursor = None
 
-    # Get credentials from user as required by rubric [cite: 201]
-    db_host = input("Enter MySQL host (default: localhost): ") or "localhost"
-    db_user = input("Enter MySQL user (default: root): ") or "root"
-    db_password = getpass.getpass("Enter MySQL password: ") or "meow"
-    db_name = input("Enter database name (default: walmart): ") or "walmart"
+    # --- THIS BLOCK IS MODIFIED ---
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", default=None, help="MySQL host")
+    parser.add_argument("--user", default=None, help="MySQL user")
+    parser.add_argument("--password", default=None, help="MySQL password")
+    parser.add_argument("--database", default=None, help="MySQL database")
+    # --- ADD THIS LINE ---
+    parser.add_argument("--port", default=None, help="MySQL port")
+    args = parser.parse_args()
+
+    # If args were passed, use them. Otherwise, ask the user (normal behavior).
+    db_host = args.host or input("Enter MySQL host (default: localhost): ") or "localhost"
+    db_user = args.user or input("Enter MySQL user (default: root): ") or "root"
+    db_password = args.password or getpass.getpass("Enter MySQL password: ") or "meow"
+    db_name = args.database or input("Enter database name (default: walmart): ") or "walmart"
+    # --- ADD THIS LINE ---
+    db_port = args.port or input("Enter MySQL port (default: 3306): ") or "3306"
+    # --- END MODIFIED BLOCK ---
 
     try:
+        # --- THIS BLOCK IS MODIFIED ---
         conn = mysql.connector.connect(
             database=db_name,
             user=db_user,
             password=db_password,
-            host=db_host
+            host=db_host,
+            # --- ADD THIS LINE ---
+            port=db_port
         )
+        # --- END MODIFIED BLOCK ---
+        
         cursor = conn.cursor()
         print(f"[Main] Connected to database '{db_name}' as user '{db_user}'.")
 
         # --- Run Population Steps ---
         populate_dim_date(cursor)
         populate_dim_customer(cursor)
-        
-        # --- Call the NEW function ---
-        # (This replaces the old populate_dim_product)
         populate_product_store_supplier(cursor)
 
         # Commit everything
         conn.commit()
         print("[Main] All changes committed.")
 
+    # --- THIS BLOCK IS MODIFIED (to be more robust) ---
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("[Main][FATAL] Access denied. Check MySQL credentials.")
@@ -247,6 +264,7 @@ def main():
             print(f"[Main][FATAL] Database '{db_name}' does not exist.")
         else:
             print(f"[Main][FATAL] Database error: {err}")
+    # --- END MODIFIED BLOCK ---
     except Exception as e:
         print(f"[Main][FATAL] Unexpected error: {e}")
     finally:

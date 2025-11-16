@@ -14,6 +14,7 @@ import random
 import mysql.connector
 import getpass
 import json
+import argparse
 from collections import defaultdict
 from mysql.connector import errorcode
 from doubly_linked_list import DoublyLinkedList
@@ -269,12 +270,21 @@ def main():
         print("Missing index files. Run 'build_index.py' first.")
         return
     
-    # [cite_start]Get credentials as required by rubric [cite: 201]
-    db_host = input("Enter MySQL host (default: localhost): ") or "localhost"
-    db_user = input("Enter MySQL user (default: root): ") or "root"
-    db_password = getpass.getpass("Enter MySQL password: ") or "meow"
-    db_name = input("Enter database name (default: walmart): ") or "walmart"
-    db_port = input("Enter MySQL port (default: 3306): ") or "3306"
+    # --- THIS BLOCK IS NEW ---
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", default=None, help="MySQL host")
+    parser.add_argument("--user", default=None, help="MySQL user")
+    parser.add_argument("--password", default=None, help="MySQL password")
+    parser.add_argument("--database", default=None, help="MySQL database")
+    parser.add_argument("--port", default=None, help="MySQL port")
+    args = parser.parse_args()
+
+    db_host = args.host or input("Enter MySQL host (default: localhost): ") or "localhost"
+    db_user = args.user or input("Enter MySQL user (default: root): ") or "root"
+    db_password = args.password or getpass.getpass("Enter MySQL password: ") or "meow"
+    db_name = args.database or input("Enter database name (default: walmart): ") or "walmart"
+    db_port = args.port or input("Enter MySQL port (default: 3306): ") or "3306"
+    # --- END NEW BLOCK ---
 
     try:
         conn = mysql.connector.connect(
