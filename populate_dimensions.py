@@ -175,16 +175,16 @@ def main():
     conn = None
     cursor = None
 
-    db_name = "walmart"
-    db_user = "root"
-    db_pass = "meow"
-    db_host = "localhost"
+    db_host = input("Enter MySQL host (default: localhost): ") or "localhost"
+    db_user = input("Enter MySQL user (default: root): ") or "root"
+    db_password = getpass.getpass("Enter MySQL password: ") or "meow"
+    db_name = input("Enter database name (default: walmart): ") or "walmart"
 
     try:
         conn = mysql.connector.connect(
             database=db_name,
             user=db_user,
-            password=db_pass,
+            password=db_password,
             host=db_host
         )
         cursor = conn.cursor()

@@ -285,15 +285,22 @@ def main():
     except FileNotFoundError:
         print("Missing index files. Build them before running the join.")
         return
+    
+    db_host = input("Enter MySQL host (default: localhost): ") or "localhost"
+    db_user = input("Enter MySQL user (default: root): ") or "root"
+    db_password = getpass.getpass("Enter MySQL password: ") or "meow"
+    db_name = input("Enter database name (default: walmart): ") or "walmart"
+    db_port = input("Enter MySQL port (default: 3306): ") or "3306"
+
 
     # DB Connection
     try:
         conn = mysql.connector.connect(
-            database="walmart",
-            user="root",
-            password="meow",
-            host="localhost",
-            port="3306",
+            database=db_name,
+            user=db_user,
+            password=db_password,
+            host=db_host,
+            port=db_port,
             autocommit=False
         )
         print("Connected to MySQL.")
