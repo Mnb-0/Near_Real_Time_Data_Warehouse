@@ -1,437 +1,509 @@
-use walmart;
+-- #####################################################################
+-- ## FILE: Run-Queries.sql (CORRECTED)
+-- ##
+-- ## This script is now consistent with the new schema.
+-- ## 1. The View joins all 5 dimension tables.
+-- ## 2. Column names (e.g., product_category) are fixed.
+-- ## 3. Queries (Q12, Q13, etc.) now use the correct Store/Supplier data.
+-- #####################################################################
+USE walmart;
 
-create or replace view v_salesanalysis as
-select
-    f.transaction_id,
-    f.purchase_amount,
-    d.full_date,
-    d.day_of_week_name,
-    d.is_weekend,
-    d.month_name,
-    d.month_num,
-    d.quarter,
-    d.year,
-    c.customer_id,
-    c.age_group,
-    c.gender,
-    c.occupation,
-    c.city_category,
-    c.stay_in_current_city_years,
-    c.marital_status,
-    p.product_id,
-    p.product_category
-from
-    factsales f
-join
-    dimdate d on f.date_key = d.date_key
-join
-    dimcustomer c on f.customer_id = c.customer_id
-join
-    dimproduct p on f.product_id = p.product_id;
+-- ##
+-- ## Helper View (MODIFIED)
+-- ## This view now joins all tables, providing a complete analytical base.
+-- ##
+CREATE OR REPLACE VIEW v_SalesAnalysis AS
+SELECT
+    f.Transaction_ID,
+    f.Quantity,
+    f.Price,
+    f.Purchase_Amount,
+    
+    -- Date Attributes
+    d.Full_Date, d.Day_Of_Week_Name, d.Is_Weekend, 
+    d.Month_Name, d.Month_Num, d.Quarter, d.Year,
+    
+    -- Customer Attributes
+    c.Customer_ID, c.Age_Group, c.Gender, c.Occupation, 
+    c.City_Category, c.Stay_In_Current_City_Years, c.Marital_Status,
+    
+    -- Product Attributes
+    p.Product_ID, 
+    p.Product_Category, -- <-- FIX: Renamed from product_category_1
+    
+    -- Store Attributes
+    s.Store_ID,
+    s.Store_Name,
+    
+    -- Supplier Attributes
+    sp.Supplier_ID,
+    sp.Supplier_Name
+FROM
+    FactSales f
+JOIN
+    DimDate d ON f.Date_Key = d.Date_Key
+JOIN
+    DimCustomer c ON f.Customer_ID = c.Customer_ID
+JOIN
+    DimProduct p ON f.Product_ID = p.Product_ID
+JOIN
+    DimStore s ON f.Store_ID = s.Store_ID
+JOIN
+    DimSupplier sp ON f.Supplier_ID = sp.Supplier_ID;
 
--- Q1, Q11
-with rankedproducts as (
-    select
-        v.year,
-        v.month_name,
-        case when v.is_weekend = 1 then 'Weekend' else 'Weekday' end as day_type,
-        v.product_id,
-        sum(v.purchase_amount) as total_revenue,
-        row_number() over(
-            partition by v.year, v.month_num, v.is_weekend
-            order by sum(v.purchase_amount) desc
-        ) as ranknum
-    from
-        v_salesanalysis v
-    where
-        v.year = 2019
-    group by
-        v.year, v.month_name, v.month_num, v.is_weekend, v.product_id
+---
+-- Q1 & Q11. Top 5 Revenue-Generating Products (Weekday/Weekend, Monthly)
+---
+WITH RankedProducts AS (
+    SELECT
+        v.Year,
+        v.Month_Name,
+        CASE WHEN v.Is_Weekend = 1 THEN 'Weekend' ELSE 'Weekday' END AS Day_Type,
+        v.Product_ID,
+        SUM(v.Purchase_Amount) AS Total_Revenue,
+        ROW_NUMBER() OVER(
+            PARTITION BY v.Year, v.Month_Num, v.Is_Weekend 
+            ORDER BY SUM(v.Purchase_Amount) DESC
+        ) AS RankNum
+    FROM
+        v_SalesAnalysis v
+    WHERE
+        v.Year = 2019 -- Example Year
+    GROUP BY
+        v.Year, v.Month_Name, v.Month_Num, v.Is_Weekend, v.Product_ID
 )
-select
-    year, month_name, day_type, product_id, total_revenue, ranknum
-from
-    rankedproducts
-where
-    ranknum <= 5
-order by
-    year, month_name, day_type, ranknum;
+SELECT
+    Year, Month_Name, Day_Type, Product_ID, Total_Revenue, RankNum
+FROM
+    RankedProducts
+WHERE
+    RankNum <= 5
+ORDER BY
+    Year, Month_Name, Day_Type, RankNum;
 
--- Q2
-select
-    city_category,
-    gender,
-    age_group,
-    sum(purchase_amount) as total_purchase_amount,
-    count(distinct customer_id) as total_customers
-from
-    v_salesanalysis
-group by
-    city_category, gender, age_group
-order by
-    city_category, total_purchase_amount desc;
+---
+-- Q2. Customer Demographics by Purchase Amount (by City Category)
+---
+SELECT
+    City_Category,
+    Gender,
+    Age_Group,
+    SUM(Purchase_Amount) AS Total_Purchase_Amount,
+    COUNT(DISTINCT Customer_ID) AS Total_Customers
+FROM
+    v_SalesAnalysis
+GROUP BY
+    City_Category, Gender, Age_Group
+ORDER BY
+    City_Category, Total_Purchase_Amount DESC;
 
--- Q3
-select
-    occupation,
-    product_category_1,
-    sum(purchase_amount) as total_sales
-from
-    v_salesanalysis
-group by
-    occupation, product_category_1
-order by
-    occupation, total_sales desc;
+---
+-- Q3. Product Category Sales by Occupation
+---
+SELECT
+    Occupation,
+    Product_Category, -- <-- FIX: Renamed from product_category_1
+    SUM(Purchase_Amount) AS Total_Sales
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Occupation, Product_Category
+ORDER BY
+    Occupation, Total_Sales DESC;
 
--- Q4
-select
-    quarter,
-    gender,
-    age_group,
-    sum(purchase_amount) as total_purchases
-from
-    v_salesanalysis
-where
-    year = 2019
-group by
-    quarter, gender, age_group
-order by
-    quarter, gender, age_group;
+---
+-- Q4. Total Purchases by Gender and Age Group (Quarterly Trend)
+---
+SELECT
+    Quarter,
+    Gender,
+    Age_Group,
+    SUM(Purchase_Amount) AS Total_Purchases
+FROM
+    v_SalesAnalysis
+WHERE
+    Year = 2019 -- Example: "current year"
+GROUP BY
+    Quarter, Gender, Age_Group
+ORDER BY
+    Quarter, Gender, Age_Group;
 
--- Q5
-with rankedoccupations as (
-    select
-        product_category_1,
-        occupation,
-        sum(purchase_amount) as total_sales,
-        row_number() over(
-            partition by product_category_1
-            order by sum(purchase_amount) desc
-        ) as ranknum
-    from
-        v_salesanalysis
-    group by
-        product_category_1, occupation
+---
+-- Q5. Top 5 Occupations by Product Category Sales
+---
+WITH RankedOccupations AS (
+    SELECT
+        Product_Category, -- <-- FIX: Renamed from product_category_1
+        Occupation,
+        SUM(Purchase_Amount) AS Total_Sales,
+        ROW_NUMBER() OVER(
+            PARTITION BY Product_Category 
+            ORDER BY SUM(Purchase_Amount) DESC
+        ) AS RankNum
+    FROM
+        v_SalesAnalysis
+    GROUP BY
+        Product_Category, Occupation
 )
-select
-    product_category_1, occupation, total_sales
-from
-    rankedoccupations
-where
-    ranknum <= 5
-order by
-    product_category_1, ranknum;
+SELECT
+    Product_Category, Occupation, Total_Sales
+FROM
+    RankedOccupations
+WHERE
+    RankNum <= 5
+ORDER BY
+    Product_Category, RankNum;
 
--- Q6
-select
-    year,
-    month_name,
-    city_category,
-    case when marital_status = 1 then 'Married' else 'Single' end as marital_status,
-    sum(purchase_amount) as total_purchases
-from
-    v_salesanalysis
-where
-    full_date between '2019-01-01' and '2019-06-30'
-group by
-    year, month_num, month_name, city_category, marital_status
-order by
-    year, month_num, city_category;
+---
+-- Q6. City Category Performance by Marital Status (Monthly, Past 6 Months)
+---
+SELECT
+    Year,
+    Month_Name,
+    City_Category,
+    CASE WHEN Marital_Status = 1 THEN 'Married' ELSE 'Single' END AS Marital_Status,
+    SUM(Purchase_Amount) AS Total_Purchases
+FROM
+    v_SalesAnalysis
+WHERE
+    Full_Date BETWEEN '2019-01-01' AND '2019-06-30' -- Example time window
+GROUP BY
+    Year, Month_Num, Month_Name, City_Category, Marital_Status
+ORDER BY
+    Year, Month_Num, City_Category;
 
--- Q7
-select
-    stay_in_current_city_years,
-    gender,
-    avg(purchase_amount) as average_purchase_amount
-from
-    v_salesanalysis
-group by
-    stay_in_current_city_years, gender
-order by
-    stay_in_current_city_years, gender;
+---
+-- Q7. Average Purchase Amount by Stay Duration and Gender
+---
+SELECT
+    Stay_In_Current_City_Years,
+    Gender,
+    AVG(Purchase_Amount) AS Average_Purchase_Amount
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Stay_In_Current_City_Years, Gender
+ORDER BY
+    Stay_In_Current_City_Years, Gender;
 
--- Q8
-with rankedcities as (
-    select
-        product_category_1,
-        city_category,
-        sum(purchase_amount) as total_revenue,
-        row_number() over(
-            partition by product_category_1
-            order by sum(purchase_amount) desc
-        ) as ranknum
-    from
-        v_salesanalysis
-    group by
-        product_category_1, city_category
+---
+-- Q8. Top 5 Revenue-Generating Cities by Product Category
+---
+WITH RankedCities AS (
+    SELECT
+        Product_Category, -- <-- FIX: Renamed from product_category_1
+        City_Category,
+        SUM(Purchase_Amount) AS Total_Revenue,
+        ROW_NUMBER() OVER(
+            PARTITION BY Product_Category
+            ORDER BY SUM(Purchase_Amount) DESC
+        ) AS RankNum
+    FROM
+        v_SalesAnalysis
+    GROUP BY
+        Product_Category, City_Category
 )
-select
-    product_category_1, city_category, total_revenue
-from
-    rankedcities
-where
-    ranknum <= 5
-order by
-    product_category_1, ranknum;
+SELECT
+    Product_Category, City_Category, Total_Revenue
+FROM
+    RankedCities
+WHERE
+    RankNum <= 5
+ORDER BY
+    Product_Category, RankNum;
 
--- Q9
-with monthlysales as (
-    select
-        product_category_1,
-        year,
-        month_num,
-        sum(purchase_amount) as current_month_sales
-    from
-        v_salesanalysis
-    where
-        year = 2019
-    group by
-        product_category_1, year, month_num
+---
+-- Q9. Monthly Sales Growth by Product Category
+---
+WITH MonthlySales AS (
+    SELECT
+        Product_Category, -- <-- FIX: Renamed from product_category_1
+        Year,
+        Month_Num,
+        SUM(Purchase_Amount) AS Current_Month_Sales
+    FROM
+        v_SalesAnalysis
+    WHERE
+        Year = 2019 -- Example: "current year"
+    GROUP BY
+        Product_Category, Year, Month_Num
 ),
-laggedsales as (
-    select
-        product_category_1,
-        year,
-        month_num,
-        current_month_sales,
-        lag(current_month_sales, 1, 0) over(
-            partition by product_category_1
-            order by year, month_num
-        ) as previous_month_sales
-    from
-        monthlysales
+LaggedSales AS (
+    SELECT
+        Product_Category,
+        Year,
+        Month_Num,
+        Current_Month_Sales,
+        LAG(Current_Month_Sales, 1, 0) OVER(
+            PARTITION BY Product_Category
+            ORDER BY Year, Month_Num
+        ) AS Previous_Month_Sales
+    FROM
+        MonthlySales
 )
-select
-    product_category_1,
-    year,
-    month_num,
-    current_month_sales,
-    previous_month_sales,
-    case
-        when previous_month_sales = 0 then null
-        else (current_month_sales - previous_month_sales) * 100.0 / previous_month_sales
-    end as mom_growth_percentage
-from
-    laggedsales
-order by
-    product_category_1, year, month_num;
+SELECT
+    Product_Category,
+    Year,
+    Month_Num,
+    Current_Month_Sales,
+    Previous_Month_Sales,
+    CASE
+        WHEN Previous_Month_Sales = 0 THEN NULL
+        ELSE (Current_Month_Sales - Previous_Month_Sales) * 100.0 / Previous_Month_Sales
+    END AS MoM_Growth_Percentage
+FROM
+    LaggedSales
+ORDER BY
+    Product_Category, Year, Month_Num;
 
--- Q10
-select
-    age_group,
-    case when is_weekend = 1 then 'Weekend' else 'Weekday' end as day_type,
-    sum(purchase_amount) as total_sales
-from
-    v_salesanalysis
-where
-    year = 2019
-group by
-    age_group, is_weekend
-order by
-    age_group, day_type;
+---
+-- Q10. Weekend vs. Weekday Sales by Age Group
+---
+SELECT
+    Age_Group,
+    CASE WHEN Is_Weekend = 1 THEN 'Weekend' ELSE 'Weekday' END AS Day_Type,
+    SUM(Purchase_Amount) AS Total_Sales
+FROM
+    v_SalesAnalysis
+WHERE
+    Year = 2019 -- Example: "current year"
+GROUP BY
+    Age_Group, Is_Weekend
+ORDER BY
+    Age_Group, Day_Type;
 
--- Q12
-with quarterlysales as (
-    select
-        city_category,
-        quarter,
-        sum(purchase_amount) as current_quarter_sales
-    from
-        v_salesanalysis
-    where
-        year = 2019
-    group by
-        city_category, quarter
+---
+-- Q12. Trend Analysis of Store Revenue Growth Rate (Quarterly, 2017)
+-- <-- FIX: Now correctly uses Store_Name -->
+---
+WITH QuarterlySales AS (
+    SELECT
+        Store_Name, -- <-- CORRECTED
+        Quarter,
+        SUM(Purchase_Amount) AS Current_Quarter_Sales
+    FROM
+        v_SalesAnalysis
+    WHERE
+        Year = 2017 -- Per query spec
+    GROUP BY
+        Store_Name, Quarter
 ),
-laggedquarterlysales as (
-    select
-        city_category,
-        quarter,
-        current_quarter_sales,
-        lag(current_quarter_sales, 1, 0) over(
-            partition by city_category
-            order by quarter
-        ) as previous_quarter_sales
-    from
-        quarterlysales
+LaggedQuarterlySales AS (
+    SELECT
+        Store_Name,
+        Quarter,
+        Current_Quarter_Sales,
+        LAG(Current_Quarter_Sales, 1, 0) OVER(
+            PARTITION BY Store_Name
+            ORDER BY Quarter
+        ) AS Previous_Quarter_Sales
+    FROM
+        QuarterlySales
 )
-select
-    city_category,
-    quarter,
-    current_quarter_sales,
-    previous_quarter_sales,
-    case
-        when previous_quarter_sales = 0 then null
-        else (current_quarter_sales - previous_quarter_sales) * 100.0 / previous_quarter_sales
-    end as qoq_growth_percentage
-from
-    laggedquarterlysales
-order by
-    city_category, quarter;
+SELECT
+    Store_Name,
+    Quarter,
+    Current_Quarter_Sales,
+    Previous_Quarter_Sales,
+    CASE
+        WHEN Previous_Quarter_Sales = 0 THEN NULL
+        ELSE (Current_Quarter_Sales - Previous_Quarter_Sales) * 100.0 / Previous_Quarter_Sales
+    END AS QoQ_Growth_Percentage
+FROM
+    LaggedQuarterlySales
+ORDER BY
+    Store_Name, Quarter;
 
--- Q13
-select
-    city_category,
-    product_id,
-    product_category_1,
-    sum(purchase_amount) as total_sales
-from
-    v_salesanalysis
-group by
-    city_category, product_id, product_category_1
-order by
-    city_category, product_id;
+---
+-- Q13. Detailed Supplier Sales Contribution by Store and Product Name
+-- <-- FIX: Now correctly uses Store, Supplier, and Product -->
+---
+SELECT
+    Store_Name,
+    Supplier_Name,
+    Product_ID,       -- Per query spec "Product Name"
+    Product_Category, -- <-- FIX: Renamed from product_category_1
+    SUM(Purchase_Amount) AS Total_Sales
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Store_Name, Supplier_Name, Product_ID, Product_Category
+ORDER BY
+    Store_Name, Supplier_Name, Total_Sales DESC;
 
--- Q14
-select
-    product_id,
-    case
-        when month_num in (3,4,5) then 'Spring'
-        when month_num in (6,7,8) then 'Summer'
-        when month_num in (9,10,11) then 'Fall'
-        else 'Winter'
-    end as season,
-    sum(purchase_amount) as total_sales
-from
-    v_salesanalysis
-group by
-    product_id, season
-order by
-    product_id, season;
+---
+-- Q14. Seasonal Analysis of Product Sales
+---
+SELECT
+    Product_ID,
+    CASE 
+        WHEN Month_Num IN (3, 4, 5) THEN 'Spring'
+        WHEN Month_Num IN (6, 7, 8) THEN 'Summer'
+        WHEN Month_Num IN (9, 10, 11) THEN 'Fall'
+        ELSE 'Winter' -- (12, 1, 2)
+    END AS Season,
+    SUM(Purchase_Amount) AS Total_Sales
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Product_ID, Season
+ORDER BY
+    Product_ID, Season;
 
--- Q15
-with monthlysales as (
-    select
-        city_category,
-        product_category_1,
-        year,
-        month_num,
-        sum(purchase_amount) as current_month_sales
-    from
-        v_salesanalysis
-    group by
-        city_category, product_category_1, year, month_num
+---
+-- Q15. Store-Wise and Supplier-Wise Monthly Revenue Volatility
+-- <-- FIX: Now correctly uses Store_Name and Supplier_Name -->
+---
+WITH MonthlySales AS (
+    SELECT
+        Store_Name,
+        Supplier_Name,
+        Year,
+        Month_Num,
+        SUM(Purchase_Amount) AS Current_Month_Sales
+    FROM
+        v_SalesAnalysis
+    GROUP BY
+        Store_Name, Supplier_Name, Year, Month_Num
 ),
-laggedsales as (
-    select
-        city_category,
-        product_category_1,
-        year,
-        month_num,
-        current_month_sales,
-        lag(current_month_sales, 1, 0) over(
-            partition by city_category, product_category_1
-            order by year, month_num
-        ) as previous_month_sales
-    from
-        monthlysales
+LaggedSales AS (
+    SELECT
+        Store_Name,
+        Supplier_Name,
+        Year,
+        Month_Num,
+        Current_Month_Sales,
+        LAG(Current_Month_Sales, 1, 0) OVER(
+            PARTITION BY Store_Name, Supplier_Name
+            ORDER BY Year, Month_Num
+        ) AS Previous_Month_Sales
+    FROM
+        MonthlySales
 )
-select
-    city_category,
-    product_category_1,
-    year,
-    month_num,
-    current_month_sales,
-    previous_month_sales,
-    case
-        when previous_month_sales = 0 then null
-        else (current_month_sales - previous_month_sales) * 100.0 / previous_month_sales
-    end as mom_volatility_percent
-from
-    laggedsales
-order by
-    city_category, product_category_1, year, month_num;
+SELECT
+    Store_Name,
+    Supplier_Name,
+    Year,
+    Month_Num,
+    Current_Month_Sales,
+    Previous_Month_Sales,
+    CASE
+        WHEN Previous_Month_Sales = 0 THEN NULL
+        ELSE (Current_Month_Sales - Previous_Month_Sales) * 100.0 / Previous_Month_Sales
+    END AS MoM_Volatility_Percent
+FROM
+    LaggedSales
+ORDER BY
+    Store_Name, Supplier_Name, Year, Month_Num;
 
--- Q16
-select
-    f1.product_id as product_a,
-    f2.product_id as product_b,
-    count(*) as times_purchased_together
-from
-    factsales f1
-join
-    factsales f2
-    on f1.transaction_id = f2.transaction_id
-    and f1.product_id < f2.product_id
-group by
-    f1.product_id, f2.product_id
-order by
-    times_purchased_together desc
-limit 5;
+---
+-- Q16. Top 5 Products Purchased Together (Product Affinity Analysis)
+---
+SELECT
+    f1.Product_ID AS Product_A,
+    f2.Product_ID AS Product_B,
+    COUNT(*) AS Times_Purchased_Together
+FROM
+    FactSales f1
+JOIN
+    FactSales f2 
+    ON f1.Transaction_ID = f2.Transaction_ID
+    AND f1.Product_ID < f2.Product_ID -- Prevents (A,A) and (B,A) pairs
+GROUP BY
+    f1.Product_ID, f2.Product_ID
+ORDER BY
+    Times_Purchased_Together DESC
+LIMIT 5;
 
--- Q17
-select
-    year,
-    city_category,
-    product_category_1,
-    product_id,
-    sum(purchase_amount) as total_revenue
-from
-    v_salesanalysis
-group by
-    year, city_category, product_category_1, product_id with rollup
-order by
-    year, city_category, product_category_1, product_id;
+---
+-- Q17. Yearly Revenue Trends by Store, Supplier, and Product with ROLLUP
+-- <-- FIX: Now correctly uses Store, Supplier, and Product -->
+---
+SELECT
+    Year,
+    Store_Name,
+    Supplier_Name,
+    Product_Category, -- <-- FIX: Renamed from product_category_1
+    Product_ID,
+    SUM(Purchase_Amount) AS Total_Revenue
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Year, Store_Name, Supplier_Name, Product_Category, Product_ID WITH ROLLUP
+ORDER BY
+    Year, Store_Name, Supplier_Name, Product_Category, Product_ID;
 
--- Q18
-select
-    year,
-    product_id,
-    sum(case when quarter in (1,2) then purchase_amount else 0 end) as h1_revenue,
-    sum(case when quarter in (3,4) then purchase_amount else 0 end) as h2_revenue,
-    count(case when quarter in (1,2) then transaction_id else null end) as h1_volume,
-    count(case when quarter in (3,4) then transaction_id else null end) as h2_volume,
-    sum(purchase_amount) as total_yearly_revenue,
-    count(transaction_id) as total_yearly_volume
-from
-    v_salesanalysis
-group by
-    year, product_id
-order by
-    year, total_yearly_revenue desc;
+---
+-- Q18. Revenue and Volume-Based Sales (H1 vs H2)
+---
+SELECT
+    Year,
+    Product_ID,
+    -- H1 Revenue (Q1 + Q2)
+    SUM(CASE WHEN Quarter IN (1, 2) THEN Purchase_Amount ELSE 0 END) AS H1_Revenue,
+    -- H2 Revenue (Q3 + Q4)
+    SUM(CASE WHEN Quarter IN (3, 4) THEN Purchase_Amount ELSE 0 END) AS H2_Revenue,
+    -- H1 Volume
+    SUM(CASE WHEN Quarter IN (1, 2) THEN Quantity ELSE 0 END) AS H1_Volume,
+    -- H2 Volume
+    SUM(CASE WHEN Quarter IN (3, 4) THEN Quantity ELSE 0 END) AS H2_Volume,
+    -- Yearly Totals
+    SUM(Purchase_Amount) AS Total_Yearly_Revenue,
+    SUM(Quantity) AS Total_Yearly_Volume
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Year, Product_ID
+ORDER BY
+    Year, Total_Yearly_Revenue DESC;
 
--- Q19
-with dailyproductsales as (
-    select
-        product_id,
-        full_date,
-        sum(purchase_amount) as daily_sales
-    from
-        v_salesanalysis
-    group by
-        product_id, full_date
+---
+-- Q19. Identify High Revenue Spikes (Outliers)
+---
+WITH DailyProductSales AS (
+    SELECT
+        Product_ID,
+        Full_Date,
+        SUM(Purchase_Amount) AS Daily_Sales
+    FROM
+        v_SalesAnalysis
+    GROUP BY
+        Product_ID, Full_Date
 ),
-productaverages as (
-    select
-        product_id,
-        full_date,
-        daily_sales,
-        avg(daily_sales) over(partition by product_id) as avg_daily_sales
-    from
-        dailyproductsales
+ProductAverages AS (
+    SELECT
+        Product_ID,
+        Full_Date,
+        Daily_Sales,
+        AVG(Daily_Sales) OVER(PARTITION BY Product_ID) AS Avg_Daily_Sales
+    FROM
+        DailyProductSales
 )
-select
-    product_id,
-    full_date,
-    daily_sales,
-    avg_daily_sales
-from
-    productaverages
-where
-    daily_sales > (avg_daily_sales * 2)
-order by
-    product_id, full_date;
+SELECT
+    Product_ID,
+    Full_Date,
+    Daily_Sales,
+    Avg_Daily_Sales
+FROM
+    ProductAverages
+WHERE
+    Daily_Sales > (Avg_Daily_Sales * 2) -- Spike > 2x average
+ORDER BY
+    Product_ID, Full_Date;
 
--- Q20
-create or replace view v_city_quarterly_sales as
-select
-    city_category,
-    year,
-    quarter,
-    sum(purchase_amount) as total_quarterly_sales
-from
-    v_salesanalysis
-group by
-    city_category, year, quarter
-order by
-    city_category, year, quarter;
+---
+-- Q20. Create a View for Optimized Sales Analysis
+-- <-- FIX: Now correctly uses Store_Name -->
+---
+CREATE OR REPLACE VIEW v_Store_Quarterly_Sales AS
+SELECT
+    Store_Name,
+    Year,
+    Quarter,
+    SUM(Purchase_Amount) AS Total_Quarterly_Sales
+FROM
+    v_SalesAnalysis
+GROUP BY
+    Store_Name, Year, Quarter
+ORDER BY
+    Store_Name, Year, Quarter;

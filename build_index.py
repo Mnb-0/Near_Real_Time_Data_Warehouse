@@ -1,10 +1,8 @@
 # #####################################################################
-# PART 1: PRE-PROCESSING
-# File: build_index.py
+# ## FILE: build_index.py (CORRECT)
+# ##
+# ## This script builds the partitions + indexes.
 # #####################################################################
-
-
-# This builds the partitions + indexes needed before running HYBRIDJOIN.
 import os
 import csv
 import json
@@ -55,6 +53,7 @@ def build_partitions_and_index(master_file, key_index, partition_dir, index_file
 
                 writer.writerow(row)
                 records_in_partition += 1
+                # "Last-one-wins" index logic
                 index[key] = partition_filename
 
                 # If this chunk is full, switch to a new file
