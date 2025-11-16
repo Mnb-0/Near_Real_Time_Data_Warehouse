@@ -61,4 +61,5 @@ set foreign_key_checks=1;
 select * from dimproduct;
 select * from dimdate;
 select * from dimcustomer;
+select * from factsales;
 select count(*) from factsales;
