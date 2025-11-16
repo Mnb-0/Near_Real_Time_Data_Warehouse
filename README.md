@@ -14,8 +14,7 @@ This project runs on a few key assumptions you must be aware of:
 
 * Ambiguous Price Data: The `product_master_data.csv` file has store information, meaning one product can have multiple prices. The `transactional_data.csv` (the stream) does not say which store a sale happened at.
 * The "As-Is" Solution: This code proceeds without changing the data files. It handles the ambiguity using a "Last One Wins" behavior. This means the price used for a sale will be the last price found for that product in the master file. This is not financially accurate, but it allows the ETL to run and populate the database.
-* Hardcoded Credentials: All Python scripts are hardcoded to connect to a MySQL database named `walmart` with the username `root` and password `meow`. If your database password is different, you must edit the `.py` files.
-
+* Credentials: All Python scripts are coded to connect to a MySQL database after asking for the needed credentials from the user.
 ---
 
 ## Requirements (What You Need)
@@ -27,13 +26,13 @@ Before you begin, you must have this software installed on your machine.
    * Installing MySQL Workbench is recommended. It makes database management easier.
    * Download Page: `https://dev.mysql.com/downloads/mysql/`
 
-2. **Python (Version 3.8 or newer):**
+2. **Python (Version 3.14 or newer):**
    * This is the programming language used to run the project.
    * Download Page: `https://www.python.org/downloads/`
    * During installation, make sure to check the box that says "Add Python to PATH".
 
 3. **Project Files:**
-   * You need all 7 project files (`.py` and `.csv`) in a single folder (for example: `C:\Walmart_Project`).
+   * You need all 7 project files (`.py` and `.csv`) in a single folder (for example: `C:\DWBI_Project`).
 
 ---
 
@@ -41,7 +40,7 @@ Before you begin, you must have this software installed on your machine.
 
 Follow these steps in order. Do not skip any.
 
-### Step 1: Set Up the Database User & Schema
+### Step 1: Set Up the Database User & Schema (Skip only if you understand what you're doing)
 
 1. Open MySQL Workbench.
 2. Connect to your local database.
@@ -63,77 +62,7 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'meow';
 
 ### Step 2: Create the Database Tables (DDL)
 
-Copy and execute all of this:
-
-```sql
-CREATE DATABASE IF NOT EXISTS walmart;
-USE walmart;
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- Dimension: DimDate
-DROP TABLE IF EXISTS DimDate;
-CREATE TABLE DimDate (
-    Date_Key          INT PRIMARY KEY,
-    Full_Date         DATE NOT NULL,
-    Day_Of_Week_Name  VARCHAR(10) NOT NULL,
-    Day_Of_Week_Num   INT NOT NULL,
-    Is_Weekend        TINYINT(1) NOT NULL,
-    Month_Name        VARCHAR(10) NOT NULL,
-    Month_Num         INT NOT NULL,
-    Quarter           INT NOT NULL,
-    Year              INT NOT NULL,
-    INDEX idx_dimdate_full_date (Full_Date)
-) ENGINE=InnoDB;
-
--- Dimension: DimCustomer
-DROP TABLE IF EXISTS DimCustomer;
-CREATE TABLE DimCustomer (
-    Customer_ID                 INT PRIMARY KEY,
-    Age_Group                   VARCHAR(10) NOT NULL,
-    Gender                      CHAR(1) NOT NULL,
-    Occupation                  VARCHAR(50) NOT NULL,
-    City_Category               CHAR(1) NOT NULL,
-    Stay_In_Current_City_Years  VARCHAR(5) NOT NULL,
-    Marital_Status              INT NOT NULL,
-    INDEX idx_dimcustomer_city_cat (City_Category),
-    INDEX idx_dimcustomer_occupation (Occupation)
-) ENGINE=InnoDB;
-
--- Dimension: DimProduct
-DROP TABLE IF EXISTS DimProduct;
-CREATE TABLE DimProduct (
-    Product_ID          VARCHAR(20) PRIMARY KEY,
-    Product_Category_1  VARCHAR(50) NOT NULL,
-    Product_Category_2  VARCHAR(50),
-    Product_Category_3  VARCHAR(50),
-    INDEX idx_dimproduct_cat1 (Product_Category_1)
-) ENGINE=InnoDB;
-
--- Fact Table: FactSales
-DROP TABLE IF EXISTS FactSales;
-CREATE TABLE FactSales (
-    Transaction_ID      VARCHAR(50) NOT NULL,
-    Customer_ID         INT NOT NULL,
-    Product_ID          VARCHAR(20) NOT NULL,
-    Date_Key            INT NOT NULL,
-    Purchase_Amount     DECIMAL(12, 2) NOT NULL,
-    PRIMARY KEY (Transaction_ID, Product_ID),
-    CONSTRAINT fk_customer
-        FOREIGN KEY(Customer_ID)
-        REFERENCES DimCustomer(Customer_ID),
-    CONSTRAINT fk_product
-        FOREIGN KEY(Product_ID)
-        REFERENCES DimProduct(Product_ID),
-    CONSTRAINT fk_date
-        FOREIGN KEY(Date_Key)
-        REFERENCES DimDate(Date_Key),
-    INDEX idx_factsales_date_key (Date_Key),
-    INDEX idx_factsales_cust_prod (Customer_ID, Product_ID)
-) ENGINE=InnoDB;
-
-SET FOREIGN_KEY_CHECKS=1;
-```
+Run all the SQL statement in order in the  ``` "Create-DW.sql" ``` file.
 
 ### Step 3: Install the Python Library
 
@@ -148,15 +77,16 @@ pip install mysql-connector-python
 Navigate to the project folder:
 
 ```bash
-cd C:\Walmart_Project
+cd C:\Near_Real_Time_Data_Warehouse
 ```
+or whatever you may have named your folder
 
-Then run the scripts:
+Then run the scripts in this specific order:
 
 ```bash
 python populate_dimensions.py
 python build_index.py
-python hybrid_join_etl.py
+python hybrid_join.py
 ```
 
 ---
@@ -183,6 +113,13 @@ SELECT * FROM FactSales LIMIT 20;
 
 This should return sample rows.
 
+You may also run
+
+```sql
+SELECT COUNT(*) FROM FactSales;
+```
+This will let you know how many rows have been loaded into the Fact Table by the ETL Script (hybrid_join.py)
+
 ---
 
 ## Troubleshooting
@@ -197,7 +134,7 @@ This should return sample rows.
 
 * **Error:** `Access denied for user 'root'@'localhost'`
 
-  * Fix: Either change your MySQL password to `meow` or edit the Python scripts to use your actual password.
+  * Fix: Either change your MySQL password to `meow` or give the Python scripts your actual password.
 
 * **Error:** `[FATAL] Database 'walmart' does not exist.`
 
