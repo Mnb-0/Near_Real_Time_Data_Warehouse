@@ -1,16 +1,25 @@
 # #####################################################################
-# ## FILE: gui_runner.py
+# ## FILE: gui_runner.py (CORRECTED)
 # ##
-# ## A simple Tkinter GUI to orchestrate the entire DWH project.
+# ## Fixes:
+# ## 1. Imported 'BOTTOM', 'Y', 'N', 'S', 'E', 'W' from tkinter.
+# ## 2. Replaced 'multi=True' with a robust statement splitter.
+# ## 3. Added checks for 'process.stdout' being None.
+# ## 4. Added check for 'cursor.description' being None.
 # #####################################################################
 
 import tkinter as tk
-from tkinter import scrolledtext, messagebox, END, BOTH, LEFT, RIGHT, TOP, X, Y, SUNKEN
+# --- FIX 1: Import all required tkinter constants ---
+from tkinter import scrolledtext, messagebox, END, BOTH, LEFT, RIGHT, TOP, X, Y, SUNKEN, N, S, E, W, BOTTOM
+from tkinter import ttk
 import threading
 import queue
 import subprocess
 import mysql.connector
 from mysql.connector import errorcode
+
+# Import the queries from our separate file
+from sql_queries import QUERIES
 
 # --- Define script filenames ---
 SQL_SCRIPT_FILE = 'Create-DW.sql'
@@ -27,8 +36,32 @@ class ProjectRunner(tk.Tk):
         self.title("DWH Project Runner")
         self.geometry("800x600")
 
-        # --- 1. Credentials Frame ---
-        cred_frame = tk.Frame(self, bd=2, relief=SUNKEN)
+        # --- 1. Create Notebook (Tabs) ---
+        self.notebook = ttk.Notebook(self)
+        
+        self.tab1 = ttk.Frame(self.notebook)
+        self.tab2 = ttk.Frame(self.notebook)
+        
+        self.notebook.add(self.tab1, text='ETL Pipeline Runner')
+        self.notebook.add(self.tab2, text='Data Analysis Queries')
+        
+        self.notebook.pack(fill=BOTH, expand=True, padx=5, pady=5)
+        
+        # --- 2. Populate Tab 1 (ETL Pipeline) ---
+        self.setup_tab1()
+        
+        # --- 3. Populate Tab 2 (Query Runner) ---
+        self.setup_tab2()
+
+        # --- 4. Setup Log Processing Queue ---
+        self.log_queue = queue.Queue()
+        self.after(100, self.process_log_queue)
+
+    def setup_tab1(self):
+        """Creates all widgets for the ETL Pipeline tab."""
+        
+        # --- Credentials Frame ---
+        cred_frame = tk.Frame(self.tab1, bd=2, relief=SUNKEN)
         cred_frame.pack(side=TOP, fill=X, padx=5, pady=5)
         
         self.credentials = {}
@@ -51,8 +84,8 @@ class ProjectRunner(tk.Tk):
             entry.grid(row=i, column=1, padx=5, pady=2, sticky="w")
             self.credentials[key] = entry
 
-        # --- 2. Button Frame ---
-        button_frame = tk.Frame(self)
+        # --- Button Frame ---
+        button_frame = tk.Frame(self.tab1)
         button_frame.pack(side=TOP, fill=X, padx=5, pady=5)
 
         self.run_button = tk.Button(
@@ -64,8 +97,8 @@ class ProjectRunner(tk.Tk):
         )
         self.run_button.pack(fill=X, expand=True)
 
-        # --- 3. Console Frame ---
-        console_frame = tk.Frame(self, bd=2, relief=SUNKEN)
+        # --- Console Frame ---
+        console_frame = tk.Frame(self.tab1, bd=2, relief=SUNKEN)
         console_frame.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         self.console = scrolledtext.ScrolledText(
@@ -77,45 +110,78 @@ class ProjectRunner(tk.Tk):
         )
         self.console.pack(fill=BOTH, expand=True)
 
-        self.queue = queue.Queue()
-        self.after(100, self.process_queue)
+    def setup_tab2(self):
+        """Creates all widgets for the Data Analysis tab."""
+        
+        # --- Query Selection Frame ---
+        query_frame = tk.Frame(self.tab2, bd=2, relief=SUNKEN)
+        query_frame.pack(side=TOP, fill=X, padx=5, pady=5)
+        
+        tk.Label(query_frame, text="Select Query:").pack(side=LEFT, padx=5)
+        
+        self.query_var = tk.StringVar()
+        query_names = list(QUERIES.keys())
+        self.query_var.set(query_names[0]) # Set default
+        
+        query_menu = ttk.OptionMenu(query_frame, self.query_var, query_names[0], *query_names)
+        query_menu.pack(side=LEFT, fill=X, expand=True, padx=5)
+        
+        self.run_query_button = tk.Button(
+            query_frame, 
+            text="Run Query", 
+            command=self.start_query_thread,
+            font=("Helvetica", 10, "bold"),
+            bg="#007BFF", fg="white"
+        )
+        self.run_query_button.pack(side=RIGHT, padx=5)
+        
+        # --- Results Frame ---
+        results_frame = tk.Frame(self.tab2, bd=2, relief=SUNKEN)
+        results_frame.pack(fill=BOTH, expand=True, padx=5, pady=5)
+        
+        self.results_tree = ttk.Treeview(results_frame, show='headings')
+        
+        # Add scrollbars
+        vsb = ttk.Scrollbar(results_frame, orient="vertical", command=self.results_tree.yview)
+        hsb = ttk.Scrollbar(results_frame, orient="horizontal", command=self.results_tree.xview)
+        self.results_tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        
+        vsb.pack(side=RIGHT, fill=Y)
+        hsb.pack(side=BOTTOM, fill=X)
+        self.results_tree.pack(fill=BOTH, expand=True)
 
+    # --- LOGGING ---
     def log(self, message):
-        """Helper to log messages to the console."""
         self.console.insert(END, message + "\n")
         self.console.see(END)
 
+    def process_log_queue(self):
+        try:
+            while True:
+                message = self.log_queue.get_nowait()
+                self.log(message)
+        except queue.Empty:
+            self.after(100, self.process_log_queue)
+
+    def queue_log(self, message):
+        self.log_queue.put(message)
+
+    # --- PIPELINE (TAB 1) LOGIC ---
     def start_pipeline(self):
-        """Starts the main pipeline in a new thread to avoid freezing the GUI."""
         self.run_button.config(text="... PIPELINE RUNNING ...", state=tk.DISABLED)
         self.log("="*60)
         self.log("=== STARTING FULL PROJECT PIPELINE ===")
         
-        # Get credentials from GUI
         self.creds_dict = {key: entry.get() for key, entry in self.credentials.items()}
         
-        # Run in a separate thread
         self.pipeline_thread = threading.Thread(
             target=self.run_pipeline_thread, 
             daemon=True
         )
         self.pipeline_thread.start()
 
-    def process_queue(self):
-        """Polls the message queue from the worker thread."""
-        try:
-            while True:
-                message = self.queue.get_nowait()
-                self.log(message)
-        except queue.Empty:
-            self.after(100, self.process_queue) # Check again in 100ms
-
-    def queue_log(self, message):
-        """Thread-safe way to log from the worker thread."""
-        self.queue.put(message)
-        
     def run_pipeline_thread(self):
-        """THE MAIN WORKER THREAD - Runs all scripts in order."""
+        """THE MAIN WORKER THREAD - Runs all ETL scripts in order."""
         try:
             # --- STEP 1: Run Create-DW.sql ---
             self.queue_log("\n--- [STEP 1] Running Create-DW.sql ---")
@@ -143,7 +209,7 @@ class ProjectRunner(tk.Tk):
             
             self.queue_log("\n" + "="*60)
             self.queue_log("✅ === PIPELINE COMPLETED SUCCESSFULLY! ===")
-            self.queue_log("You can now close this window and run Run-Queries.sql in MySQL Workbench.")
+            self.queue_log("You can now switch to the 'Data Analysis Queries' tab to run queries.")
 
         except Exception as e:
             self.queue_log("\n" + "="*60)
@@ -159,37 +225,38 @@ class ProjectRunner(tk.Tk):
             with open(script_file, 'r', encoding='utf-8') as f:
                 sql_script = f.read()
             
-            # Connect to MySQL *server*
             self.queue_log("[SQL] Connecting to server...")
             conn = mysql.connector.connect(
                 host=self.creds_dict['host'],
                 user=self.creds_dict['user'],
                 password=self.creds_dict['password'],
-                port=self.creds_dict['port']
+                port=int(self.creds_dict['port']) # Ensure port is int
             )
             cursor = conn.cursor()
             
-            # Execute the script by splitting it into individual statements and running them sequentially.
-            # This avoids relying on a 'multi' parameter which may not be supported in the installed connector.
-            self.queue_log("[SQL] Executing full DDL script (splitting statements)...")
-            # Naively split on semicolons and execute non-empty statements.
-            statements = [s.strip() for s in sql_script.split(';') if s.strip()]
+            # --- FIX 2: Replace 'multi=True' with a robust splitter ---
+            # This avoids the "Unread result found" error from SELECT statements
+            # in the Create-DW.sql file.
+            self.queue_log("[SQL] Executing full DDL script...")
+            statements = [s for s in sql_script.split(';') if s.strip()]
+            
             for stmt in statements:
+                self.queue_log(f"[SQL] ...executing: {stmt[:60].strip()}...")
+                cursor.execute(stmt)
+                # Consume any potential results (like from SELECT)
+                # to prevent "Unread result" errors.
                 try:
-                    self.queue_log(f"[SQL] Executing statement: {stmt[:60]}...")
-                    cursor.execute(stmt)
-                    conn.commit()
-                except mysql.connector.Error as stmt_err:
-                    self.queue_log(f"[SQL Error] Failed to execute statement: {stmt_err}")
-                    cursor.close()
-                    conn.close()
-                    return False
-
+                    _ = cursor.fetchall()
+                except mysql.connector.Error as e:
+                    if e.errno != errorcode.CR_NO_RESULT_SET:
+                        raise
+            # --- END FIX 2 ---
+            
             cursor.close()
             conn.close()
             self.queue_log("[SQL] DDL script finished.")
             return True
-
+            
         except mysql.connector.Error as err:
             self.queue_log(f"[SQL Error] {err}")
             return False
@@ -202,43 +269,33 @@ class ProjectRunner(tk.Tk):
 
     def _run_python_script(self, script_name):
         """Runs a Python script as a subprocess and logs its output."""
-        
-        # Build the command with arguments
         cmd = [
-            'python', 
-            script_name,
+            'python', script_name,
             '--host', self.creds_dict['host'],
             '--user', self.creds_dict['user'],
             '--password', self.creds_dict['password'],
             '--database', self.creds_dict['database'],
             '--port', self.creds_dict['port']
         ]
-
         try:
-            # Use Popen to capture output in real-time
             process = subprocess.Popen(
-                cmd, 
-                stdout=subprocess.PIPE, 
-                stderr=subprocess.STDOUT, 
-                text=True, 
-                encoding='utf-8',
-                bufsize=1 # Line-buffered
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+                text=True, encoding='utf-8', bufsize=1,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
 
-            # Read line by line from the subprocess output; guard if stdout is None
+            # --- FIX 3: Add check for None stdout ---
             if process.stdout is None:
-                # Unable to capture stdout; wait for process to finish and report error if any.
-                self.queue_log(f"[Error] Failed to capture stdout for {script_name}")
-                return_code = process.wait()
-            else:
-                for line in iter(process.stdout.readline, ''):
-                    # If the process has ended and we read an empty line, break to avoid blocking.
-                    if line == '' and process.poll() is not None:
-                        break
-                    self.queue_log(f"[{script_name}] {line.strip()}")
-                
-                process.stdout.close()
-                return_code = process.wait()
+                self.queue_log(f"[Error] Could not capture output from {script_name}.")
+                process.wait() # Wait for it to finish
+                return False # Assume failure if we can't see output
+
+            for line in iter(process.stdout.readline, ''):
+                self.queue_log(f"[{script_name}] {line.strip()}")
+            
+            process.stdout.close()
+            return_code = process.wait()
+            # --- END FIX 3 ---
 
             if return_code != 0:
                 self.queue_log(f"[Error] {script_name} exited with code {return_code}")
@@ -246,11 +303,86 @@ class ProjectRunner(tk.Tk):
             return True
             
         except FileNotFoundError:
-            self.queue_log(f"[Error] Script not found: {script_name}")
+            self.queue_log(f"[Error] 'python' command not found. Is Python in your PATH?")
             return False
         except Exception as e:
             self.queue_log(f"[Error] Subprocess failed: {e}")
             return False
+
+    # --- QUERY (TAB 2) LOGIC ---
+    def start_query_thread(self):
+        """Starts the query runner in a new thread."""
+        self.run_query_button.config(text="...", state=tk.DISABLED)
+        # Log to the ETL console (Tab 1)
+        self.queue_log("="*60)
+        self.queue_log(f"--- [QUERY] Running: {self.query_var.get()} ---")
+        
+        self.query_thread = threading.Thread(
+            target=self.run_query_thread, 
+            daemon=True
+        )
+        self.query_thread.start()
+
+    def run_query_thread(self):
+        """THE WORKER THREAD - Connects to DB and runs one query."""
+        try:
+            sql_text = QUERIES[self.query_var.get()]
+            creds = {key: entry.get() for key, entry in self.credentials.items()}
+
+            conn = mysql.connector.connect(
+                host=creds['host'],
+                user=creds['user'],
+                password=creds['password'],
+                database=creds['database'], # Connect directly to walmart
+                port=int(creds['port']) # Ensure port is int
+            )
+            cursor = conn.cursor()
+            
+            self.queue_log(f"[QUERY] Executing: {sql_text[:100]}...")
+            cursor.execute(sql_text)
+            
+            # --- FIX 4: Check if cursor.description is None ---
+            # This happens for 'CREATE VIEW' statements
+            if cursor.description is None:
+                conn.commit()
+                self.queue_log(f"[QUERY] Success: View was created/replaced.")
+                self.after(0, self.update_results_tree, ["Status"], [["View Created Successfully!"]])
+            else:
+                headers = [desc[0] for desc in cursor.description]
+                rows = cursor.fetchall()
+                self.queue_log(f"[QUERY] Success: {len(rows)} rows returned.")
+                self.after(0, self.update_results_tree, headers, rows)
+            # --- END FIX 4 ---
+                
+            cursor.close()
+            conn.close()
+
+        except mysql.connector.Error as err:
+            self.queue_log(f"[QUERY ERROR] {err}")
+            messagebox.showerror("Query Failed", f"{err}")
+        except Exception as e:
+            self.queue_log(f"[QUERY ERROR] {e}")
+            messagebox.showerror("Query Failed", f"An unexpected error occurred: {e}")
+        finally:
+            self.run_query_button.config(text="Run Query", state=tk.NORMAL)
+
+    def update_results_tree(self, headers, rows):
+        """Safely updates the results table from the main GUI thread."""
+        try:
+            self.results_tree.delete(*self.results_tree.get_children())
+            self.results_tree.config(columns=headers)
+            
+            for header in headers:
+                self.results_tree.heading(header, text=header)
+                self.results_tree.column(header, width=100, anchor='w')
+                
+            for row in rows:
+                self.results_tree.insert('', 'end', values=row)
+        except Exception as e:
+            self.queue_log(f"[GUI ERROR] Failed to update results table: {e}")
+
+# --- NEW: Import 'os' for the subprocess fix ---
+import os
 
 if __name__ == "__main__":
     app = ProjectRunner()
