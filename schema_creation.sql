@@ -88,3 +88,8 @@ CREATE TABLE FactSales (
 ) ENGINE=InnoDB;
 
 SET FOREIGN_KEY_CHECKS=1; -- Re-enable checks
+
+select * from DimProduct;
+select * from DimDate;
+select * from DimCustomer;
+select * from FactSales;
