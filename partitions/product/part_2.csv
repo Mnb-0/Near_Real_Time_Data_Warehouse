@@ -1,0 +1,501 @@
+,Product_ID,Product_Category,price$,storeID,supplierID,storeName,supplierName
+1706,P00017542,Health & Beauty,28.89,4,18,Game Zone,Razer Inc.
+1707,P00217942,Health & Beauty,41.94,6,9,Photo World,Canon Inc.
+1711,P00072542,Health & Beauty,57.59,5,18,InnoTech,Razer Inc.
+1713,P00178242,Toys,45.95,7,17,Health Zone,Garmin Ltd.
+1718,P00352642,Grocery,58.08,5,18,InnoTech,Razer Inc.
+1719,P00145642,Grocery,47.65,5,18,InnoTech,Razer Inc.
+1720,P00100942,Health & Beauty,47.22,3,39,Sound Zone,Sonos Inc.
+1724,P00105042,Health & Beauty,23.33,3,39,Sound Zone,Sonos Inc.
+1726,P00305042,Patio & Garden,59.97,4,18,Game Zone,Razer Inc.
+1728,P00181542,Patio & Garden,21.98,1,16,Electro Mart,Sony Corporation
+1729,P00014942,Toys,53.49,4,18,Game Zone,Razer Inc.
+1730,P00125142,Patio & Garden,74.02,7,17,Health Zone,Garmin Ltd.
+1732,P00368242,Health & Beauty,42.6,2,13,Tech Haven,Samsung Electronics
+1733,P00243542,Patio & Garden,71.76,4,18,Game Zone,Razer Inc.
+1734,P00342042,Patio & Garden,63.63,6,9,Photo World,Canon Inc.
+1735,P00179242,Patio & Garden,62.59,2,13,Tech Haven,Samsung Electronics
+1736,P00129142,Grocery,17.82,3,39,Sound Zone,Sonos Inc.
+1737,P00359242,Grocery,65.0,1,16,Electro Mart,Sony Corporation
+1739,P00308342,Health & Beauty,10.49,1,16,Electro Mart,Sony Corporation
+1740,P00216042,Health & Beauty,34.69,4,18,Game Zone,Razer Inc.
+1741,P00220342,Health & Beauty,28.31,1,16,Electro Mart,Sony Corporation
+1743,P00171342,Furniture,30.78,4,18,Game Zone,Razer Inc.
+1748,P0095842,Home & Kitchen,58.85,5,18,InnoTech,Razer Inc.
+1749,P00256042,Household Essentials,17.81,3,39,Sound Zone,Sonos Inc.
+1751,P00124242,Patio & Garden,20.56,2,13,Tech Haven,Samsung Electronics
+1754,P00236542,Toys,71.63,6,9,Photo World,Canon Inc.
+1755,P00353542,Health & Beauty,30.54,4,18,Game Zone,Razer Inc.
+1756,P00319242,Toys,65.5,1,16,Electro Mart,Sony Corporation
+1760,P00311942,Electronics,67.72,3,39,Sound Zone,Sonos Inc.
+1761,P00197142,Health & Beauty,40.25,2,13,Tech Haven,Samsung Electronics
+1763,P00065242,Electronics,21.05,3,39,Sound Zone,Sonos Inc.
+1764,P00194342,Home & Kitchen,6.42,4,18,Game Zone,Razer Inc.
+1766,P00180142,Patio & Garden,71.79,6,9,Photo World,Canon Inc.
+1767,P00168342,Patio & Garden,63.98,4,18,Game Zone,Razer Inc.
+1772,P00265342,Baby,73.78,5,18,InnoTech,Razer Inc.
+1773,P00319042,Health & Beauty,20.7,4,18,Game Zone,Razer Inc.
+1775,P00093242,Toys,21.45,3,39,Sound Zone,Sonos Inc.
+1780,P00051642,Toys,76.21,6,9,Photo World,Canon Inc.
+1781,P00293342,Toys,45.15,2,13,Tech Haven,Samsung Electronics
+1788,P00153842,Toys,41.11,4,18,Game Zone,Razer Inc.
+1789,P00130842,Health & Beauty,16.7,2,13,Tech Haven,Samsung Electronics
+1792,P00155842,Toys,78.29,7,17,Health Zone,Garmin Ltd.
+1794,P00211242,Toys,7.08,2,13,Tech Haven,Samsung Electronics
+1797,P00221042,Grocery,40.02,7,17,Health Zone,Garmin Ltd.
+1798,P00008142,Toys,71.48,1,16,Electro Mart,Sony Corporation
+1799,P00079942,Toys,16.88,6,9,Photo World,Canon Inc.
+1801,P00320942,Grocery,4.07,3,39,Sound Zone,Sonos Inc.
+1802,P00319442,Toys,55.97,3,39,Sound Zone,Sonos Inc.
+1804,P00235142,Health & Beauty,41.61,5,18,InnoTech,Razer Inc.
+1807,P00280442,Patio & Garden,26.15,3,39,Sound Zone,Sonos Inc.
+1808,P00173242,Health & Beauty,30.75,2,13,Tech Haven,Samsung Electronics
+1818,P0095542,Electronics,18.41,5,18,InnoTech,Razer Inc.
+1819,P00265142,Home & Kitchen,34.27,3,39,Sound Zone,Sonos Inc.
+1827,P00074342,Health & Beauty,49.53,1,16,Electro Mart,Sony Corporation
+1828,P00135342,Health & Beauty,4.3,4,18,Game Zone,Razer Inc.
+1835,P00316642,Clothing,33.61,5,18,InnoTech,Razer Inc.
+1840,P00264642,Toys,9.08,3,39,Sound Zone,Sonos Inc.
+1841,P00157642,Grocery,10.0,1,16,Electro Mart,Sony Corporation
+1843,P00070342,Grocery,64.52,4,18,Game Zone,Razer Inc.
+1849,P00073642,Toys,65.66,1,16,Electro Mart,Sony Corporation
+1853,P00268542,Health & Beauty,66.6,3,39,Sound Zone,Sonos Inc.
+1860,P00136742,Grocery,66.87,3,39,Sound Zone,Sonos Inc.
+1862,P00001542,Grocery,45.81,2,13,Tech Haven,Samsung Electronics
+1869,P00154242,Toys,63.67,51,51,Pakistan,Pakistan
+1871,P00050142,Health & Beauty,2.79,4,18,Game Zone,Razer Inc.
+1872,P00130642,Patio & Garden,21.85,6,9,Photo World,Canon Inc.
+1874,P00024642,Health & Beauty,21.17,5,18,InnoTech,Razer Inc.
+1875,P00329942,Health & Beauty,46.91,7,17,Health Zone,Garmin Ltd.
+1880,P00192742,Patio & Garden,49.56,5,18,InnoTech,Razer Inc.
+1881,P00138842,Health & Beauty,35.48,5,18,InnoTech,Razer Inc.
+1883,P00185842,Clothing,46.6,3,39,Sound Zone,Sonos Inc.
+1887,P00115042,Health & Beauty,4.74,3,39,Sound Zone,Sonos Inc.
+1891,P00120642,Health & Beauty,51.61,4,18,Game Zone,Razer Inc.
+1892,P00005742,Toys,75.99,1,16,Electro Mart,Sony Corporation
+1898,P00048042,Grocery,64.22,4,18,Game Zone,Razer Inc.
+1902,P00273342,Automotive,68.22,7,17,Health Zone,Garmin Ltd.
+1905,P00180042,Patio & Garden,52.73,2,13,Tech Haven,Samsung Electronics
+1909,P00365342,Grocery,46.09,4,18,Game Zone,Razer Inc.
+1912,P00146742,Grocery,36.4,6,9,Photo World,Canon Inc.
+1914,P00335742,Health & Beauty,25.87,2,13,Tech Haven,Samsung Electronics
+1920,P00114842,Health & Beauty,19.23,3,39,Sound Zone,Sonos Inc.
+1923,P00366442,Toys,2.8,1,16,Electro Mart,Sony Corporation
+1925,P00348942,Toys,14.36,1,16,Electro Mart,Sony Corporation
+1927,P00270842,Health & Beauty,3.43,4,18,Game Zone,Razer Inc.
+1930,P00339342,Grocery,19.1,1,16,Electro Mart,Sony Corporation
+1932,P00358442,Grocery,29.65,4,18,Game Zone,Razer Inc.
+1935,P00031142,"Arts, Crafts & Sewing",40.91,5,18,InnoTech,Razer Inc.
+1939,P00118042,Toys,54.06,3,39,Sound Zone,Sonos Inc.
+1940,P00331142,Health & Beauty,20.56,2,13,Tech Haven,Samsung Electronics
+1941,P00156542,Clothing,59.78,6,9,Photo World,Canon Inc.
+1947,P00033442,Clothing,46.6,4,18,Game Zone,Razer Inc.
+1948,P00154442,Toys,23.83,1,16,Electro Mart,Sony Corporation
+1953,P00274642,Clothing,11.26,3,39,Sound Zone,Sonos Inc.
+1957,P00313242,Toys,73.29,2,13,Tech Haven,Samsung Electronics
+1958,P00279542,Toys,4.55,3,39,Sound Zone,Sonos Inc.
+1959,P00203742,Furniture,67.97,4,18,Game Zone,Razer Inc.
+1960,P00354442,Health & Beauty,28.57,6,9,Photo World,Canon Inc.
+1964,P00178142,Toys,73.72,4,18,Game Zone,Razer Inc.
+1965,P00092142,Toys,55.97,5,18,InnoTech,Razer Inc.
+1972,P00318342,Appliances,79.2,4,18,Game Zone,Razer Inc.
+1975,P00210942,Health & Beauty,62.12,3,39,Sound Zone,Sonos Inc.
+1979,P00215442,Office & School Supplies,5.03,6,9,Photo World,Canon Inc.
+1984,P00309242,Health & Beauty,36.86,2,13,Tech Haven,Samsung Electronics
+1985,P00109942,Toys,54.28,4,18,Game Zone,Razer Inc.
+1988,P00208042,Toys,69.26,2,13,Tech Haven,Samsung Electronics
+1990,P00029742,Health & Beauty,58.19,7,17,Health Zone,Garmin Ltd.
+1993,P00240442,Household Essentials,48.02,2,13,Tech Haven,Samsung Electronics
+1997,P00304642,Electronics,18.03,7,17,Health Zone,Garmin Ltd.
+1999,P00067942,Health & Beauty,6.04,1,16,Electro Mart,Sony Corporation
+2000,P00361942,Grocery,5.23,6,9,Photo World,Canon Inc.
+2001,P00083242,Patio & Garden,37.57,3,39,Sound Zone,Sonos Inc.
+2004,P00366942,Toys,8.86,3,39,Sound Zone,Sonos Inc.
+2010,P00149142,Patio & Garden,27.26,5,18,InnoTech,Razer Inc.
+2011,P00214642,Patio & Garden,33.88,3,39,Sound Zone,Sonos Inc.
+2013,P00181942,Patio & Garden,22.09,2,13,Tech Haven,Samsung Electronics
+2021,P00296042,Toys,14.23,5,18,InnoTech,Razer Inc.
+2023,P00189042,Toys,32.91,3,39,Sound Zone,Sonos Inc.
+2028,P00134942,Health & Beauty,64.57,1,16,Electro Mart,Sony Corporation
+2032,P00359042,Electronics,26.27,4,18,Game Zone,Razer Inc.
+2041,P00088842,Toys,61.07,5,18,InnoTech,Razer Inc.
+2042,P00159442,Health & Beauty,76.29,3,39,Sound Zone,Sonos Inc.
+2044,P00341242,Baby,37.33,1,16,Electro Mart,Sony Corporation
+2049,P00122542,Patio & Garden,4.33,4,18,Game Zone,Razer Inc.
+2050,P00295342,Electronics,25.65,1,16,Electro Mart,Sony Corporation
+2053,P00323642,Toys,24.89,3,39,Sound Zone,Sonos Inc.
+2054,P00101542,Furniture,19.64,3,39,Sound Zone,Sonos Inc.
+2057,P00307942,Household Essentials,15.62,2,13,Tech Haven,Samsung Electronics
+2058,P00297542,Toys,47.55,51,51,Pakistan,Pakistan
+2060,P00287642,Toys,32.59,4,18,Game Zone,Razer Inc.
+2061,P00115742,Household Essentials,12.84,6,9,Photo World,Canon Inc.
+2064,P00120542,Toys,47.66,5,18,InnoTech,Razer Inc.
+2066,P00330342,Health & Beauty,68.46,7,17,Health Zone,Garmin Ltd.
+2067,P00296942,Toys,2.32,5,18,InnoTech,Razer Inc.
+2068,P00332142,Toys,65.6,5,18,InnoTech,Razer Inc.
+2071,P00370042,Grocery,22.43,3,39,Sound Zone,Sonos Inc.
+2073,P00130242,Toys,26.34,3,39,Sound Zone,Sonos Inc.
+2078,P00320742,Grocery,19.38,4,18,Game Zone,Razer Inc.
+2080,P00101042,Health & Beauty,18.75,1,16,Electro Mart,Sony Corporation
+2081,P00169742,Grocery,45.5,4,18,Game Zone,Razer Inc.
+2082,P00352242,Grocery,5.15,7,17,Health Zone,Garmin Ltd.
+2083,P00181742,Patio & Garden,31.44,2,13,Tech Haven,Samsung Electronics
+2087,P00078242,Health & Beauty,38.86,4,18,Game Zone,Razer Inc.
+2088,P00059842,Health & Beauty,11.63,6,9,Photo World,Canon Inc.
+2089,P00072842,Health & Beauty,26.99,2,13,Tech Haven,Samsung Electronics
+2094,P00198242,Electronics,56.59,3,39,Sound Zone,Sonos Inc.
+2095,P00335842,Health & Beauty,54.02,1,16,Electro Mart,Sony Corporation
+2097,P00174842,Pharmacy & OTC,48.15,1,16,Electro Mart,Sony Corporation
+2098,P00214842,Appliances,5.11,4,18,Game Zone,Razer Inc.
+2100,P00248742,Health & Beauty,55.25,1,16,Electro Mart,Sony Corporation
+2106,P00052242,Toys,47.63,4,18,Game Zone,Razer Inc.
+2111,P00047742,"Arts, Crafts & Sewing",31.55,5,18,InnoTech,Razer Inc.
+2112,P00155142,Grocery,59.03,3,39,Sound Zone,Sonos Inc.
+2113,P0009842,Toys,32.95,2,13,Tech Haven,Samsung Electronics
+2114,P00052742,"Arts, Crafts & Sewing",70.18,6,9,Photo World,Canon Inc.
+2117,P00036242,Health & Beauty,58.52,4,18,Game Zone,Razer Inc.
+2118,P00025342,Household Essentials,79.07,1,16,Electro Mart,Sony Corporation
+2119,P00271042,Household Essentials,36.53,3,39,Sound Zone,Sonos Inc.
+2121,P00312842,"Arts, Crafts & Sewing",53.22,2,13,Tech Haven,Samsung Electronics
+2122,P00370642,Toys,58.6,3,39,Sound Zone,Sonos Inc.
+2123,P00309342,"Arts, Crafts & Sewing",60.28,4,18,Game Zone,Razer Inc.
+2129,P00109842,Toys,38.93,6,9,Photo World,Canon Inc.
+2132,P00287342,Health & Beauty,35.29,4,18,Game Zone,Razer Inc.
+2138,P00192242,Home & Kitchen,70.99,5,18,InnoTech,Razer Inc.
+2139,P00025942,Toys,55.58,4,18,Game Zone,Razer Inc.
+2140,P00084242,Toys,31.04,3,39,Sound Zone,Sonos Inc.
+2148,P00107242,Automotive,7.67,6,9,Photo World,Canon Inc.
+2154,P00128542,Grocery,2.61,2,13,Tech Haven,Samsung Electronics
+2155,P00260642,Home & Kitchen,45.48,4,18,Game Zone,Razer Inc.
+2156,P00082242,Patio & Garden,68.64,2,13,Tech Haven,Samsung Electronics
+2159,P00249742,Grocery,72.59,7,17,Health Zone,Garmin Ltd.
+2160,P00129042,Grocery,36.14,2,13,Tech Haven,Samsung Electronics
+2161,P00288242,Health & Beauty,14.3,7,17,Health Zone,Garmin Ltd.
+2165,P00184242,Sports & Outdoors,27.08,1,16,Electro Mart,Sony Corporation
+2170,P00302642,"Arts, Crafts & Sewing",33.26,6,9,Photo World,Canon Inc.
+2175,P00126042,Toys,29.75,3,39,Sound Zone,Sonos Inc.
+2176,P00349442,Household Essentials,54.48,3,39,Sound Zone,Sonos Inc.
+2184,P00169642,Health & Beauty,64.0,5,18,InnoTech,Razer Inc.
+2188,P00010542,Electronics,72.33,3,39,Sound Zone,Sonos Inc.
+2191,P00222042,Grocery,47.64,2,13,Tech Haven,Samsung Electronics
+2193,P0096342,Toys,37.79,5,18,InnoTech,Razer Inc.
+2195,P00356742,Health & Beauty,65.61,3,39,Sound Zone,Sonos Inc.
+2198,P00155242,Home & Kitchen,17.6,1,16,Electro Mart,Sony Corporation
+2199,P00041942,Health & Beauty,55.37,4,18,Game Zone,Razer Inc.
+2200,P00358342,Patio & Garden,49.7,5,18,InnoTech,Razer Inc.
+2206,P00127742,Grocery,60.15,3,39,Sound Zone,Sonos Inc.
+2211,P00066942,Toys,50.8,1,16,Electro Mart,Sony Corporation
+2212,P00085842,Pets,53.61,4,18,Game Zone,Razer Inc.
+2213,P00284742,Health & Beauty,40.2,1,16,Electro Mart,Sony Corporation
+2215,P00254242,Health & Beauty,7.64,3,39,Sound Zone,Sonos Inc.
+2221,P00210542,Health & Beauty,51.75,3,39,Sound Zone,Sonos Inc.
+2222,P00086342,Toys,42.68,2,13,Tech Haven,Samsung Electronics
+2224,P00315642,Toys,23.58,51,51,Pakistan,Pakistan
+2226,P0099442,Household Essentials,50.82,4,18,Game Zone,Razer Inc.
+2228,P00108542,Health & Beauty,26.27,6,9,Photo World,Canon Inc.
+2233,P00337142,Pets,68.74,5,18,InnoTech,Razer Inc.
+2242,P00111242,Grocery,27.83,7,17,Health Zone,Garmin Ltd.
+2244,P00263542,"Arts, Crafts & Sewing",62.11,5,18,InnoTech,Razer Inc.
+2245,P00250942,Patio & Garden,42.72,5,18,InnoTech,Razer Inc.
+2248,P00265442,Health & Beauty,73.24,3,39,Sound Zone,Sonos Inc.
+2251,P00006842,Health & Beauty,77.73,3,39,Sound Zone,Sonos Inc.
+2254,P00156842,Clothing,20.73,4,18,Game Zone,Razer Inc.
+2256,P00075442,Health & Beauty,70.08,1,16,Electro Mart,Sony Corporation
+2266,P00217342,Grocery,49.65,4,18,Game Zone,Razer Inc.
+2273,P00195042,Household Essentials,21.08,7,17,Health Zone,Garmin Ltd.
+2274,P00253542,Toys,24.28,2,13,Tech Haven,Samsung Electronics
+2275,P00324642,Toys,29.72,4,18,Game Zone,Razer Inc.
+2277,P00228342,Grocery,4.1,6,9,Photo World,Canon Inc.
+2279,P0098742,Toys,28.33,2,13,Tech Haven,Samsung Electronics
+2282,P00026642,Toys,63.37,3,39,Sound Zone,Sonos Inc.
+2283,P00296242,Toys,63.61,1,16,Electro Mart,Sony Corporation
+2286,P00144042,Electronics,31.94,1,16,Electro Mart,Sony Corporation
+2288,P00040942,"Arts, Crafts & Sewing",19.7,4,18,Game Zone,Razer Inc.
+2289,P00043842,Toys,42.59,1,16,Electro Mart,Sony Corporation
+2290,P00032142,Health & Beauty,10.36,4,18,Game Zone,Razer Inc.
+2292,P00000542,Health & Beauty,16.54,5,18,InnoTech,Razer Inc.
+2293,P00035642,Toys,21.91,3,39,Sound Zone,Sonos Inc.
+2296,P00291242,Toys,65.76,2,13,Tech Haven,Samsung Electronics
+2297,P00198842,Toys,39.3,6,9,Photo World,Canon Inc.
+2298,P00256342,Health & Beauty,33.86,4,18,Game Zone,Razer Inc.
+2302,P00298442,"Arts, Crafts & Sewing",20.27,1,16,Electro Mart,Sony Corporation
+2307,P00191942,Electronics,47.76,3,39,Sound Zone,Sonos Inc.
+2308,P00230942,Health & Beauty,31.8,2,13,Tech Haven,Samsung Electronics
+2310,P00305342,Health & Beauty,27.31,3,39,Sound Zone,Sonos Inc.
+2313,P00157142,Patio & Garden,77.77,4,18,Game Zone,Razer Inc.
+2314,P00256842,Health & Beauty,50.86,6,9,Photo World,Canon Inc.
+2323,P00002042,Grocery,56.66,4,18,Game Zone,Razer Inc.
+2326,P00294242,Clothing,61.03,5,18,InnoTech,Razer Inc.
+2339,P00193642,Electronics,38.45,4,18,Game Zone,Razer Inc.
+2343,P00109542,Toys,34.01,3,39,Sound Zone,Sonos Inc.
+2345,P00169442,Toys,20.36,6,9,Photo World,Canon Inc.
+2348,P00022142,Grocery,74.43,2,13,Tech Haven,Samsung Electronics
+2349,P00231242,"Arts, Crafts & Sewing",72.88,4,18,Game Zone,Razer Inc.
+2350,P00299142,Health & Beauty,38.85,2,13,Tech Haven,Samsung Electronics
+2356,P00337542,Health & Beauty,11.16,7,17,Health Zone,Garmin Ltd.
+2361,P00065042,Health & Beauty,61.18,2,13,Tech Haven,Samsung Electronics
+2365,P00148442,Electronics,63.6,7,17,Health Zone,Garmin Ltd.
+2374,P00349242,Toys,8.76,1,16,Electro Mart,Sony Corporation
+2378,P00289842,Grocery,58.56,6,9,Photo World,Canon Inc.
+2380,P00033942,Health & Beauty,3.81,3,39,Sound Zone,Sonos Inc.
+2381,P00190542,Home & Kitchen,14.85,3,39,Sound Zone,Sonos Inc.
+2387,P00207942,Household Essentials,51.48,5,18,InnoTech,Razer Inc.
+2397,P00164842,Health & Beauty,33.16,3,39,Sound Zone,Sonos Inc.
+2398,P00266442,Health & Beauty,78.41,2,13,Tech Haven,Samsung Electronics
+2401,P00346242,Grocery,45.43,5,18,InnoTech,Razer Inc.
+2412,P00103242,Toys,3.09,3,39,Sound Zone,Sonos Inc.
+2415,P00061542,Health & Beauty,2.12,1,16,Electro Mart,Sony Corporation
+2416,P00209142,Health & Beauty,51.57,4,18,Game Zone,Razer Inc.
+2417,P00052442,Health & Beauty,28.64,5,18,InnoTech,Razer Inc.
+2418,P00116542,Health & Beauty,29.84,3,39,Sound Zone,Sonos Inc.
+2420,P00325742,Electronics,77.44,1,16,Electro Mart,Sony Corporation
+2437,P00340042,Health & Beauty,44.72,4,18,Game Zone,Razer Inc.
+2438,P00221742,Grocery,20.74,1,16,Electro Mart,Sony Corporation
+2443,P00241742,Health & Beauty,76.26,3,39,Sound Zone,Sonos Inc.
+2452,P00018842,Toys,22.22,3,39,Sound Zone,Sonos Inc.
+2454,P00297742,Toys,25.94,2,13,Tech Haven,Samsung Electronics
+2459,P00168142,Toys,51.41,51,51,Pakistan,Pakistan
+2465,P00106042,Health & Beauty,30.65,4,18,Game Zone,Razer Inc.
+2475,P00163442,Household Essentials,10.99,6,9,Photo World,Canon Inc.
+2478,P00237842,Health & Beauty,66.0,5,18,InnoTech,Razer Inc.
+2479,P00300042,"Arts, Crafts & Sewing",5.05,7,17,Health Zone,Garmin Ltd.
+2480,P00196542,Health & Beauty,24.01,5,18,InnoTech,Razer Inc.
+2504,P00273942,Health & Beauty,70.26,5,18,InnoTech,Razer Inc.
+2523,P00272842,Health & Beauty,26.85,3,39,Sound Zone,Sonos Inc.
+2528,P00116042,Toys,75.1,3,39,Sound Zone,Sonos Inc.
+2533,P00012142,Health & Beauty,68.61,4,18,Game Zone,Razer Inc.
+2534,P00104942,Health & Beauty,19.31,1,16,Electro Mart,Sony Corporation
+2538,P00117242,Toys,39.01,4,18,Game Zone,Razer Inc.
+2561,P00085642,Health & Beauty,27.94,7,17,Health Zone,Garmin Ltd.
+2563,P00123842,Patio & Garden,47.44,2,13,Tech Haven,Samsung Electronics
+2567,P00300242,Toys,20.74,4,18,Game Zone,Razer Inc.
+2575,P00108642,Toys,45.56,6,9,Photo World,Canon Inc.
+2578,P00101742,Pets,23.01,2,13,Tech Haven,Samsung Electronics
+2581,P00367942,Health & Beauty,25.65,3,39,Sound Zone,Sonos Inc.
+2599,P00209642,Office & School Supplies,35.08,1,16,Electro Mart,Sony Corporation
+2600,P00085342,Automotive,33.17,1,16,Electro Mart,Sony Corporation
+2602,P00111942,Toys,9.46,4,18,Game Zone,Razer Inc.
+2607,P00283142,Furniture,9.32,1,16,Electro Mart,Sony Corporation
+2613,P00186642,Electronics,53.21,4,18,Game Zone,Razer Inc.
+2621,P00177142,Toys,71.78,5,18,InnoTech,Razer Inc.
+2622,P00350142,Toys,51.87,3,39,Sound Zone,Sonos Inc.
+2624,P00123742,Patio & Garden,46.11,2,13,Tech Haven,Samsung Electronics
+2625,P00338842,Patio & Garden,64.2,6,9,Photo World,Canon Inc.
+2626,P00368442,Patio & Garden,25.53,4,18,Game Zone,Razer Inc.
+2629,P00316842,Clothing,22.26,1,16,Electro Mart,Sony Corporation
+2642,P00320042,Grocery,5.9,3,39,Sound Zone,Sonos Inc.
+2645,P0095642,Health & Beauty,37.77,2,13,Tech Haven,Samsung Electronics
+2646,P00206342,Health & Beauty,64.64,3,39,Sound Zone,Sonos Inc.
+2647,P00316442,Health & Beauty,26.86,4,18,Game Zone,Razer Inc.
+2648,P00218742,Health & Beauty,70.6,6,9,Photo World,Canon Inc.
+2649,P00124942,Patio & Garden,18.46,4,18,Game Zone,Razer Inc.
+2650,P00267242,Patio & Garden,42.52,5,18,InnoTech,Razer Inc.
+2652,P00193942,Patio & Garden,52.34,4,18,Game Zone,Razer Inc.
+2653,P00180542,Patio & Garden,41.07,3,39,Sound Zone,Sonos Inc.
+2654,P00226842,Patio & Garden,69.91,6,9,Photo World,Canon Inc.
+2657,P00204742,Toys,56.76,2,13,Tech Haven,Samsung Electronics
+2658,P00285242,Pharmacy & OTC,30.1,4,18,Game Zone,Razer Inc.
+2660,P00232642,Toys,49.43,2,13,Tech Haven,Samsung Electronics
+2662,P00282342,Electronics,41.64,7,17,Health Zone,Garmin Ltd.
+2664,P00257842,Patio & Garden,43.91,2,13,Tech Haven,Samsung Electronics
+2665,P00303942,Toys,20.56,7,17,Health Zone,Garmin Ltd.
+2667,P00212442,Patio & Garden,47.41,1,16,Electro Mart,Sony Corporation
+2670,P00354842,Toys,11.31,6,9,Photo World,Canon Inc.
+2671,P00223142,Health & Beauty,42.1,3,39,Sound Zone,Sonos Inc.
+2685,P00191342,Electronics,73.86,3,39,Sound Zone,Sonos Inc.
+2690,P00015842,Grocery,4.95,5,18,InnoTech,Razer Inc.
+2692,P00330242,Health & Beauty,76.56,3,39,Sound Zone,Sonos Inc.
+2696,P00310342,Household Essentials,47.89,2,13,Tech Haven,Samsung Electronics
+2705,P00006942,Grocery,23.21,5,18,InnoTech,Razer Inc.
+2706,P00296142,Health & Beauty,27.45,3,39,Sound Zone,Sonos Inc.
+2707,P00015742,Baby,22.11,1,16,Electro Mart,Sony Corporation
+2717,P00280842,Grocery,44.8,4,18,Game Zone,Razer Inc.
+2719,P00253142,Grocery,43.91,5,18,InnoTech,Razer Inc.
+2723,P00012242,Electronics,19.18,3,39,Sound Zone,Sonos Inc.
+2729,P0096842,Home & Kitchen,2.66,1,16,Electro Mart,Sony Corporation
+2736,P00145142,Health & Beauty,55.08,4,18,Game Zone,Razer Inc.
+2739,P00054342,Baby,73.34,1,16,Electro Mart,Sony Corporation
+2740,P00223742,Electronics,40.97,3,39,Sound Zone,Sonos Inc.
+2741,P00150842,Patio & Garden,32.01,3,39,Sound Zone,Sonos Inc.
+2742,P00232042,Patio & Garden,48.81,2,13,Tech Haven,Samsung Electronics
+2746,P00177542,Grocery,16.76,51,51,Pakistan,Pakistan
+2749,P00359742,Grocery,22.13,4,18,Game Zone,Razer Inc.
+2752,P00210042,Toys,37.13,6,9,Photo World,Canon Inc.
+2753,P00297342,Health & Beauty,58.49,5,18,InnoTech,Razer Inc.
+2761,P00206042,Health & Beauty,17.34,7,17,Health Zone,Garmin Ltd.
+2769,P00294842,Toys,46.48,5,18,InnoTech,Razer Inc.
+2772,P00059642,Grocery,51.46,5,18,InnoTech,Razer Inc.
+2774,P00368142,Electronics,32.29,3,39,Sound Zone,Sonos Inc.
+2781,P00327642,"Books, Movies & Music",79.29,3,39,Sound Zone,Sonos Inc.
+2795,P00126542,Toys,17.01,4,18,Game Zone,Razer Inc.
+2798,P00088442,Toys,27.41,1,16,Electro Mart,Sony Corporation
+2799,P00176142,Toys,50.12,4,18,Game Zone,Razer Inc.
+2811,P00040142,Health & Beauty,37.08,7,17,Health Zone,Garmin Ltd.
+2813,P00321042,Grocery,55.91,2,13,Tech Haven,Samsung Electronics
+2816,P00252742,Toys,37.4,4,18,Game Zone,Razer Inc.
+2825,P00056542,Toys,13.64,6,9,Photo World,Canon Inc.
+2834,P00022742,Toys,60.87,2,13,Tech Haven,Samsung Electronics
+2838,P00120742,Toys,62.21,3,39,Sound Zone,Sonos Inc.
+2843,P00054242,Grocery,63.79,1,16,Electro Mart,Sony Corporation
+2850,P00295742,Toys,61.27,1,16,Electro Mart,Sony Corporation
+2852,P00336942,Health & Beauty,20.87,4,18,Game Zone,Razer Inc.
+2856,P00136842,Grocery,20.42,1,16,Electro Mart,Sony Corporation
+2857,P00304042,Health & Beauty,73.97,4,18,Game Zone,Razer Inc.
+2859,P00127042,Clothing,15.17,5,18,InnoTech,Razer Inc.
+2861,P00166042,Health & Beauty,36.73,3,39,Sound Zone,Sonos Inc.
+2866,P00315842,Health & Beauty,68.66,2,13,Tech Haven,Samsung Electronics
+2867,P00271542,"Books, Movies & Music",78.15,6,9,Photo World,Canon Inc.
+2871,P00311342,Pharmacy & OTC,33.75,4,18,Game Zone,Razer Inc.
+2872,P00088042,Grocery,36.33,1,16,Electro Mart,Sony Corporation
+2884,P00256442,Health & Beauty,28.22,3,39,Sound Zone,Sonos Inc.
+2890,P00215042,Health & Beauty,69.99,2,13,Tech Haven,Samsung Electronics
+2893,P00353142,Health & Beauty,6.91,3,39,Sound Zone,Sonos Inc.
+2895,P00276242,Toys,72.85,4,18,Game Zone,Razer Inc.
+2896,P00031742,Toys,20.12,6,9,Photo World,Canon Inc.
+2898,P00176642,Household Essentials,26.24,4,18,Game Zone,Razer Inc.
+2907,P00174042,Clothing,74.83,5,18,InnoTech,Razer Inc.
+2913,P00029142,Toys,64.11,4,18,Game Zone,Razer Inc.
+2915,P00070942,Home & Kitchen,59.12,3,39,Sound Zone,Sonos Inc.
+2916,P00211442,Toys,61.18,6,9,Photo World,Canon Inc.
+2919,P0099242,Toys,65.87,2,13,Tech Haven,Samsung Electronics
+2923,P00034342,Health & Beauty,55.66,4,18,Game Zone,Razer Inc.
+2928,P00024942,Health & Beauty,71.46,2,13,Tech Haven,Samsung Electronics
+2931,P00246642,Office & School Supplies,44.61,7,17,Health Zone,Garmin Ltd.
+2932,P00074642,Health & Beauty,53.62,2,13,Tech Haven,Samsung Electronics
+2933,P00105342,Grocery,20.68,7,17,Health Zone,Garmin Ltd.
+2941,P00319142,Health & Beauty,10.9,1,16,Electro Mart,Sony Corporation
+2943,P00329242,Health & Beauty,79.41,6,9,Photo World,Canon Inc.
+2946,P0094342,Clothing,48.2,3,39,Sound Zone,Sonos Inc.
+2948,P00280242,Health & Beauty,45.96,3,39,Sound Zone,Sonos Inc.
+2949,P00151042,Health & Beauty,65.17,5,18,InnoTech,Razer Inc.
+2950,P00000342,Health & Beauty,73.85,3,39,Sound Zone,Sonos Inc.
+2951,P00211542,Health & Beauty,72.69,2,13,Tech Haven,Samsung Electronics
+2952,P00218942,Health & Beauty,75.72,5,18,InnoTech,Razer Inc.
+2955,P00278242,Grocery,33.77,3,39,Sound Zone,Sonos Inc.
+2956,P00284842,Grocery,76.89,1,16,Electro Mart,Sony Corporation
+2966,P00102142,Furniture,41.75,4,18,Game Zone,Razer Inc.
+2969,P00175642,Toys,69.23,5,18,InnoTech,Razer Inc.
+2971,P00222842,Toys,43.93,3,39,Sound Zone,Sonos Inc.
+2973,P00054942,Health & Beauty,31.96,1,16,Electro Mart,Sony Corporation
+2975,P00002442,Toys,19.94,4,18,Game Zone,Razer Inc.
+2977,P00026742,Toys,44.39,1,16,Electro Mart,Sony Corporation
+2978,P00018642,Toys,30.58,3,39,Sound Zone,Sonos Inc.
+2979,P00054042,"Books, Movies & Music",65.8,3,39,Sound Zone,Sonos Inc.
+2980,P00228642,Health & Beauty,14.0,2,13,Tech Haven,Samsung Electronics
+2981,P0098442,Baby,15.55,51,51,Pakistan,Pakistan
+2982,P00106642,Baby,20.56,4,18,Game Zone,Razer Inc.
+2983,P00114442,Health & Beauty,75.97,6,9,Photo World,Canon Inc.
+2985,P00228042,Health & Beauty,27.2,5,18,InnoTech,Razer Inc.
+2987,P00053742,Health & Beauty,11.95,7,17,Health Zone,Garmin Ltd.
+2988,P0094742,Electronics,26.39,5,18,InnoTech,Razer Inc.
+2992,P00036442,"Arts, Crafts & Sewing",57.54,5,18,InnoTech,Razer Inc.
+2993,P00064142,"Arts, Crafts & Sewing",69.83,3,39,Sound Zone,Sonos Inc.
+2994,P00021942,Toys,53.89,3,39,Sound Zone,Sonos Inc.
+2998,P00221242,Grocery,26.82,4,18,Game Zone,Razer Inc.
+2999,P00113842,Household Essentials,45.2,1,16,Electro Mart,Sony Corporation
+3004,P00133842,Toys,41.89,4,18,Game Zone,Razer Inc.
+3007,P00067142,Health & Beauty,68.67,7,17,Health Zone,Garmin Ltd.
+3016,P00191242,Home & Kitchen,19.07,2,13,Tech Haven,Samsung Electronics
+3030,P00253242,Health & Beauty,25.18,4,18,Game Zone,Razer Inc.
+3031,P00197042,Health & Beauty,2.37,6,9,Photo World,Canon Inc.
+3036,P00196642,Toys,30.92,2,13,Tech Haven,Samsung Electronics
+3039,P00195542,Electronics,37.22,3,39,Sound Zone,Sonos Inc.
+3045,P00236942,Pets,71.15,1,16,Electro Mart,Sony Corporation
+3046,P00190442,Clothing,59.01,1,16,Electro Mart,Sony Corporation
+3049,P00294442,Home & Kitchen,44.59,4,18,Game Zone,Razer Inc.
+3050,P00179842,Patio & Garden,7.0,1,16,Electro Mart,Sony Corporation
+3053,P00237642,Health & Beauty,35.0,4,18,Game Zone,Razer Inc.
+3065,P00302342,Toys,26.9,5,18,InnoTech,Razer Inc.
+3067,P00221842,Grocery,76.41,3,39,Sound Zone,Sonos Inc.
+3069,P00174242,Office & School Supplies,67.25,2,13,Tech Haven,Samsung Electronics
+3070,P00226342,Patio & Garden,36.65,6,9,Photo World,Canon Inc.
+3075,P00119842,Baby,11.63,4,18,Game Zone,Razer Inc.
+3077,P00230342,Health & Beauty,24.01,1,16,Electro Mart,Sony Corporation
+3087,P00224342,Toys,24.21,3,39,Sound Zone,Sonos Inc.
+3090,P00037342,Toys,49.33,2,13,Tech Haven,Samsung Electronics
+3092,P00184642,Toys,40.64,3,39,Sound Zone,Sonos Inc.
+3094,P00138342,Toys,45.45,4,18,Game Zone,Razer Inc.
+3095,P00188242,Toys,20.38,6,9,Photo World,Canon Inc.
+3100,P00137142,Furniture,69.09,4,18,Game Zone,Razer Inc.
+3101,P00238742,Furniture,61.23,5,18,InnoTech,Razer Inc.
+3103,P00220742,Electronics,48.71,4,18,Game Zone,Razer Inc.
+3104,P00022442,Toys,50.91,3,39,Sound Zone,Sonos Inc.
+3109,P00183342,Health & Beauty,62.5,6,9,Photo World,Canon Inc.
+3112,P00189242,Health & Beauty,33.66,2,13,Tech Haven,Samsung Electronics
+3113,P00232842,Toys,56.81,4,18,Game Zone,Razer Inc.
+3120,P00026242,Toys,21.07,2,13,Tech Haven,Samsung Electronics
+3122,P00075542,Toys,69.95,7,17,Health Zone,Garmin Ltd.
+3126,P00224242,Toys,11.98,2,13,Tech Haven,Samsung Electronics
+3132,P00368642,Patio & Garden,10.63,7,17,Health Zone,Garmin Ltd.
+3135,P00186542,Electronics,39.4,1,16,Electro Mart,Sony Corporation
+3140,P00317142,Electronics,45.52,6,9,Photo World,Canon Inc.
+3143,P00309942,Health & Beauty,36.17,3,39,Sound Zone,Sonos Inc.
+3146,P00184042,Grocery,4.89,3,39,Sound Zone,Sonos Inc.
+3152,P00029442,Toys,36.99,5,18,InnoTech,Razer Inc.
+3157,P00226942,Patio & Garden,63.25,3,39,Sound Zone,Sonos Inc.
+3164,P00050842,Household Essentials,41.67,2,13,Tech Haven,Samsung Electronics
+3174,P00334042,Grocery,67.99,5,18,InnoTech,Razer Inc.
+3181,P00081842,Toys,15.21,3,39,Sound Zone,Sonos Inc.
+3184,P00157342,Toys,67.56,1,16,Electro Mart,Sony Corporation
+3190,P00215642,Toys,72.47,4,18,Game Zone,Razer Inc.
+3193,P00002242,Household Essentials,75.9,5,18,InnoTech,Razer Inc.
+3197,P00041342,Patio & Garden,25.78,3,39,Sound Zone,Sonos Inc.
+3198,P00039742,Health & Beauty,5.84,1,16,Electro Mart,Sony Corporation
+3200,P00139542,Health & Beauty,77.02,4,18,Game Zone,Razer Inc.
+3201,P00216442,Health & Beauty,8.57,1,16,Electro Mart,Sony Corporation
+3206,P00266942,Toys,54.68,3,39,Sound Zone,Sonos Inc.
+3207,P00040342,"Books, Movies & Music",75.82,3,39,Sound Zone,Sonos Inc.
+3208,P00074042,"Arts, Crafts & Sewing",49.89,2,13,Tech Haven,Samsung Electronics
+3211,P00049242,Health & Beauty,39.53,51,51,Pakistan,Pakistan
+3212,P00140442,Grocery,74.2,4,18,Game Zone,Razer Inc.
+3214,P00269242,Patio & Garden,79.51,6,9,Photo World,Canon Inc.
+3239,P00155342,Health & Beauty,70.35,5,18,InnoTech,Razer Inc.
+3247,P00252942,Electronics,39.2,7,17,Health Zone,Garmin Ltd.
+3249,P00190342,Clothing,25.67,5,18,InnoTech,Razer Inc.
+3254,P00187942,Clothing,15.84,5,18,InnoTech,Razer Inc.
+3255,P00020242,Toys,67.53,3,39,Sound Zone,Sonos Inc.
+3265,P00212142,Toys,20.09,3,39,Sound Zone,Sonos Inc.
+3271,P00195742,Home & Kitchen,40.81,4,18,Game Zone,Razer Inc.
+3287,P00261842,Electronics,53.85,1,16,Electro Mart,Sony Corporation
+3289,P00221142,Grocery,23.35,4,18,Game Zone,Razer Inc.
+3296,P00059142,Toys,32.77,7,17,Health Zone,Garmin Ltd.
+3299,P00280142,Health & Beauty,34.76,2,13,Tech Haven,Samsung Electronics
+3316,P00023342,Home & Kitchen,27.61,4,18,Game Zone,Razer Inc.
+3322,P00184742,Patio & Garden,13.05,6,9,Photo World,Canon Inc.
+3331,P00259842,Grocery,59.27,2,13,Tech Haven,Samsung Electronics
+3334,P00157942,Toys,38.54,3,39,Sound Zone,Sonos Inc.
+3336,P00299442,Home & Kitchen,42.74,1,16,Electro Mart,Sony Corporation
+3343,P00013642,Toys,48.9,1,16,Electro Mart,Sony Corporation
+3346,P00217442,Grocery,62.38,4,18,Game Zone,Razer Inc.
+3347,P00000442,Health & Beauty,20.3,1,16,Electro Mart,Sony Corporation
+3351,P0094442,"Books, Movies & Music",66.37,4,18,Game Zone,Razer Inc.
+3354,P00331042,Health & Beauty,73.19,5,18,InnoTech,Razer Inc.
+3362,P0096142,Home & Kitchen,62.65,3,39,Sound Zone,Sonos Inc.
+3376,P00368042,Electronics,17.97,2,13,Tech Haven,Samsung Electronics
+3380,P00113442,Home & Kitchen,53.78,6,9,Photo World,Canon Inc.
+3383,P00069342,Health & Beauty,18.38,4,18,Game Zone,Razer Inc.
+3385,P00188042,Health & Beauty,69.21,1,16,Electro Mart,Sony Corporation
+3389,P00360542,"Arts, Crafts & Sewing",54.83,3,39,Sound Zone,Sonos Inc.
+3390,P00200242,Toys,71.12,2,13,Tech Haven,Samsung Electronics
+3394,P00334642,Grocery,59.65,3,39,Sound Zone,Sonos Inc.
+3397,P00086142,Health & Beauty,50.01,4,18,Game Zone,Razer Inc.
+3400,P00209942,Health & Beauty,25.24,6,9,Photo World,Canon Inc.
+3402,P00226542,Grocery,35.22,4,18,Game Zone,Razer Inc.
+3403,P00316942,Clothing,47.37,5,18,InnoTech,Razer Inc.
+3406,P00233042,Grocery,76.33,4,18,Game Zone,Razer Inc.
+3407,P00142342,Health & Beauty,44.13,3,39,Sound Zone,Sonos Inc.
+3410,P00362842,Health & Beauty,18.47,6,9,Photo World,Canon Inc.
+3421,P00199342,Electronics,42.89,2,13,Tech Haven,Samsung Electronics
+3431,P00044942,Grocery,42.55,4,18,Game Zone,Razer Inc.
+3432,P00191042,Home & Kitchen,17.08,2,13,Tech Haven,Samsung Electronics
+3441,P00004542,Health & Beauty,67.08,7,17,Health Zone,Garmin Ltd.
+3447,P00126842,Toys,49.28,2,13,Tech Haven,Samsung Electronics
+3448,P00044542,Toys,68.17,7,17,Health Zone,Garmin Ltd.
+3456,P00025642,Clothing,33.87,1,16,Electro Mart,Sony Corporation
+3457,P00052542,Toys,67.79,6,9,Photo World,Canon Inc.
+3460,P00212042,Furniture,59.15,3,39,Sound Zone,Sonos Inc.
+3461,P00264042,Clothing,38.62,3,39,Sound Zone,Sonos Inc.
+3466,P00185542,Clothing,34.08,5,18,InnoTech,Razer Inc.
+3467,P00124042,Patio & Garden,37.74,3,39,Sound Zone,Sonos Inc.
+3472,P00173042,Furniture,30.49,2,13,Tech Haven,Samsung Electronics
+3477,P00233742,Grocery,55.34,5,18,InnoTech,Razer Inc.
