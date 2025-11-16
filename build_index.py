@@ -1,22 +1,22 @@
 # #####################################################################
-# ## PART 1: PRE-PROCESSING SCRIPT
-# ## File: build_index.py
-# ##
-# ## Run this script ONCE to build the partitions and indexes
-# ## required by the HYBRIDJOIN algorithm.
+# PART 2: PRE-PROCESSING
+# File: build_index.py
 # #####################################################################
 
+
+# This builds the partitions + indexes needed before running HYBRIDJOIN.
 import os
 import csv
 import json
 
-# --- Configuration ---
-# Use the new file names you provided
+# Main dataset files
 CUSTOMER_MASTER_FILE = 'customer_master_data.csv'
 PRODUCT_MASTER_FILE = 'product_master_data.csv'
-PARTITION_SIZE = 500  # As specified: "vP... 500 tuples"
 
-# --- Output Files ---
+# Each partition will hold this many rows
+PARTITION_SIZE = 500
+
+# Output locations
 CUST_PART_DIR = 'partitions/customer'
 PROD_PART_DIR = 'partitions/product'
 CUST_INDEX_FILE = 'cust_index.json'
@@ -24,93 +24,91 @@ PROD_INDEX_FILE = 'prod_index.json'
 
 def build_partitions_and_index(master_file, key_index, partition_dir, index_file):
     """
-    Reads a master CSV, splits it into partition files, and
-    creates a JSON index mapping keys to partition filenames.
+    Reads a CSV, splits it into manageable chunks, and builds an index so
+    we actually know where each record ended up. Saves the index as JSON.
     """
+
     print(f"--- Processing {master_file} ---")
-    
     os.makedirs(partition_dir, exist_ok=True)
-    
-    index = {}  # In-memory index
+
+    index = {}
     partition_num = 0
     records_in_partition = 0
-    
+
     try:
         with open(master_file, 'r', encoding='utf-8') as f_in:
             reader = csv.reader(f_in)
-            header = next(reader)  # Read header
-            
+            header = next(reader)
+
+            # Start first partition file
             partition_filename = os.path.join(partition_dir, f'part_{partition_num}.csv')
             f_out = open(partition_filename, 'w', encoding='utf-8', newline='')
             writer = csv.writer(f_out)
-            writer.writerow(header) # Write header
-            
+            writer.writerow(header)
+
             for row in reader:
                 try:
-                    # Key is at index 1 (Customer_ID or Product_ID)
-                    key = row[key_index] 
+                    key = row[key_index]
                 except IndexError:
-                    print(f"  [Warn] Skipping bad row: {row}")
+                    print(f"  [Warn] Skipping broken row: {row}")
                     continue
-                
+
                 writer.writerow(row)
                 records_in_partition += 1
-                
-                # Map this key to the current partition file
                 index[key] = partition_filename
-                
-                # Check if partition is full
+
+                # If this chunk is full, switch to a new file
                 if records_in_partition >= PARTITION_SIZE:
                     f_out.close()
                     print(f"  [+] Created partition: {partition_filename}")
-                    
                     partition_num += 1
                     records_in_partition = 0
-                    
+
                     partition_filename = os.path.join(partition_dir, f'part_{partition_num}.csv')
                     f_out = open(partition_filename, 'w', encoding='utf-8', newline='')
                     writer = csv.writer(f_out)
                     writer.writerow(header)
-            
+
             f_out.close()
             if records_in_partition > 0:
                 print(f"  [+] Created partition: {partition_filename}")
 
     except FileNotFoundError:
-        print(f"FATAL ERROR: Master file not found: {master_file}")
+        print(f"FATAL ERROR: Can't find file: {master_file}")
         return None
-    
-    # Save the completed index to a JSON file
+
+    # Write index file
     try:
         with open(index_file, 'w', encoding='utf-8') as f_json:
             json.dump(index, f_json, indent=2)
-        print(f"  [+] Successfully created index file: {index_file}")
+        print(f"  [+] Index saved: {index_file}")
     except Exception as e:
-        print(f"FATAL ERROR writing index file {index_file}: {e}")
+        print(f"FATAL ERROR while writing index {index_file}: {e}")
         return None
-        
-    print(f"--- Finished processing {master_file} ---")
+
+    print(f"--- Done with {master_file} ---")
     return index
 
 def main():
-    print("Starting pre-processing for Naeem's HYBRIDJOIN...")
-    
-    # Process Customer Data: Key is at index 1 (Customer_ID)
+    print("Starting pre-processing for HYBRIDJOIN...")
+
+    # Customer: key at index 1
     build_partitions_and_index(
         master_file=CUSTOMER_MASTER_FILE,
-        key_index=1, 
+        key_index=1,
         partition_dir=CUST_PART_DIR,
         index_file=CUST_INDEX_FILE
     )
-    
-    # Process Product Data: Key is at index 1 (Product_ID)
+
+    # Product: also key index 1
     build_partitions_and_index(
         master_file=PRODUCT_MASTER_FILE,
         key_index=1,
         partition_dir=PROD_PART_DIR,
         index_file=PROD_INDEX_FILE
     )
-    print("All pre-processing complete. You can now run the ETL script.")
+
+    print("Pre-processing complete. You can run the ETL now.")
 
 if __name__ == "__main__":
     main()
