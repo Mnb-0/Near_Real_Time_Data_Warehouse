@@ -1,13 +1,12 @@
-# #####################################################################
-# PART 2: DOUBLY-LINKED LIST IMPLEMENTATION
-# File: doubly_linked_list.py
-# #####################################################################
+# ############################################################################################
+# This script defines a thread-safe doubly linked list (Basically a queue with O(1) deletions).
+# #############################################################################################
 
 from __future__ import annotations
-import threading
 import typing
+import threading
 
-# Basic internal node for the list.
+# node class
 class _DoublyLinkedListNode:
     __slots__ = 'data', 'prev', 'next'
     
@@ -22,12 +21,11 @@ class _DoublyLinkedListNode:
 
 class DoublyLinkedList:
     """
-    Thread-safe doubly linked list (basically a deque).
-    Good for O(1) inserts and deletions when you already have the node.
+    Thread-safe doubly linked list (basically a dequeue).
     """
 
     def __init__(self):
-        # Using two sentinels to avoid annoying edge-case checking.
+        # using two dummy nodes (head and tail) to avoid annoying edge-case checking.
         self._head = _DoublyLinkedListNode(None, None, None)
         self._tail = _DoublyLinkedListNode(None, None, None)
 
@@ -44,8 +42,7 @@ class DoublyLinkedList:
         return self._size == 0
 
     def append(self, data: typing.Any) -> _DoublyLinkedListNode:
-        # Add to the back of the list.
-        # Return the node so callers can delete it later in O(1).
+        # add to end
         with self._lock:
             new_node = _DoublyLinkedListNode(data, self._tail.prev, self._tail)
 
@@ -58,8 +55,7 @@ class DoublyLinkedList:
             return new_node
 
     def pop_front(self) -> typing.Any:
-        # Remove from the front.
-        # Standard queue behavior but with linked list guts.
+        # remove from front
         with self._lock:
             if self.is_empty():
                 raise IndexError("pop from an empty queue")
@@ -74,19 +70,17 @@ class DoublyLinkedList:
             node.next.prev = self._head
             self._size -= 1
 
-            # Drop references so Python's GC doesn’t cling to useless nodes.
+            # drop references so node can be GC'd
             node.prev = node.next = node.data = None
             return data
 
     def peek_front(self) -> typing.Any:
-        # Just look at the first element.
         with self._lock:
             if self.is_empty() or not self._head.next:
                 return None
             return self._head.next.data
 
     def delete_node(self, node: _DoublyLinkedListNode) -> None:
-        # Remove any specific node instantly.
         if not isinstance(node, _DoublyLinkedListNode):
             raise TypeError("Argument must be a _DoublyLinkedListNode")
             

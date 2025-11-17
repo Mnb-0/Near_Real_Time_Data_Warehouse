@@ -1,29 +1,24 @@
 -- #####################################################################
--- ## FILE: Create-DW.sql
--- ##
--- ## This schema is a "Galaxy Schema" (a Star Schema with multiple
--- ## fact tables or shared dimensions) to correctly model
--- ## Products, Stores, and Suppliers as separate dimensions.
+-- Setting up the walmart DB from scratch. Clean slate, clean tables.  
 -- #####################################################################
 
 -- Block 1
--- This command deletes the old 'walmart' database if it exists, so we can start fresh.
+-- Tossing the old database so nothing weird carries over.
 drop database if exists walmart;
 
 -- Block 2
--- This command creates the new 'walmart' database.
+-- Making a fresh one.
 create database if not exists walmart;
 
 -- Block 3
--- This command tells MySQL to use the 'walmart' database for all following commands.
 use walmart;
 
 -- Block 4
--- This temporarily turns off key checks so we can drop and create tables without errors.
+-- Turning FK checks off
 set foreign_key_checks=0;
 
 -- Table 1: DimDate
--- This table holds all the date information (like month, year, or if it's a weekend).
+-- Just the usual date breakdown so we don’t have to compute it every time.
 drop table if exists DimDate;
 create table DimDate (
     Date_Key          int primary key,
@@ -39,7 +34,7 @@ create table DimDate (
 ) engine=InnoDB;
 
 -- Table 2: DimCustomer
--- This table stores all the details about each customer (like age, gender, and occupation).
+-- Customer details: who they are, where they live, what they're doing.
 drop table if exists DimCustomer;
 create table DimCustomer (
     Customer_ID                 int primary key,
@@ -54,48 +49,46 @@ create table DimCustomer (
 ) engine=InnoDB;
 
 -- Table 3: DimStore
--- This new table stores the unique ID and name for each store.
+-- Simple lookup for store IDs and their names.
 drop table if exists DimStore;
 create table DimStore (
-    Store_ID            varchar(20) primary key, -- From product_master_data.csv
+    Store_ID            varchar(20) primary key,
     Store_Name          varchar(100)
 ) engine=InnoDB;
 
 -- Table 4: DimSupplier
--- This new table stores the unique ID and name for each supplier.
+-- Same idea as stores, but for suppliers.
 drop table if exists DimSupplier;
 create table DimSupplier (
-    Supplier_ID         varchar(20) primary key, -- From product_master_data.csv
+    Supplier_ID         varchar(20) primary key,
     Supplier_Name       varchar(100)
 ) engine=InnoDB;
 
 -- Table 5: DimProduct
--- This table stores details about each product (like its ID and category).
+-- Product info: ID and category
 drop table if exists DimProduct;
 create table DimProduct (
     Product_ID          varchar(20) primary key,
-    Product_Category    varchar(50) not null, -- Renamed from product_category_1
+    Product_Category    varchar(50) not null,
     index idx_dimproduct_cat (Product_Category)
 ) engine=InnoDB;
 
 -- Table 6: FactSales
--- This is the main table that links all the other tables together for every sale.
+-- The main table where everything meets: customers, products, stores, suppliers, dates.
 drop table if exists FactSales;
 create table FactSales (
     Transaction_ID      varchar(50) not null,
     Customer_ID         int not null,
     Product_ID          varchar(20) not null,
-    Store_ID            varchar(20) not null, -- NEW
-    Supplier_ID         varchar(20) not null, -- NEW
+    Store_ID            varchar(20) not null,
+    Supplier_ID         varchar(20) not null,
     Date_Key            int not null,
-    Price               decimal(10, 2) not null, -- NEW (Price at time of sale)
-    Quantity            int not null,            -- NEW (Better to store this)
-    Purchase_Amount     decimal(12, 2) not null, -- (Price * Quantity)
+    Price               decimal(10, 2) not null,
+    Quantity            int not null,
+    Purchase_Amount     decimal(12, 2) not null,
 
-    -- A composite key is needed
-    primary key (Transaction_ID, Product_ID, Store_ID), 
-    
-    -- Foreign Key constraints
+    primary key (Transaction_ID, Product_ID, Store_ID),
+
     constraint fk_customer
         foreign key(Customer_ID) references DimCustomer(Customer_ID),
     constraint fk_product
@@ -113,5 +106,4 @@ create table FactSales (
 ) engine=InnoDB;
 
 -- Block 5
--- This turns the foreign key checks back on.
 set foreign_key_checks=1;
