@@ -144,13 +144,13 @@ QUERIES = {
         order by age_group, day_type;
     """,
 
-    "q12: store growth (quarterly 2017)": """
+    "q12: store growth (quarterly 2019)": """
         with quarterlysales as (
             select
                 store_name, quarter,
                 sum(purchase_amount) as current_quarter_sales
             from v_salesanalysis
-            where year = 2017
+            where year = 2019
             group by store_name, quarter
         ),
         laggedquarterlysales as (

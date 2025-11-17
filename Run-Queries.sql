@@ -186,7 +186,7 @@ with quarterlysales as (
         quarter,
         sum(purchase_amount) as current_quarter_sales
     from v_salesanalysis
-    where year = 2017
+    where year = 2019
     group by store_name, quarter
 ),
 laggedquarterlysales as (
