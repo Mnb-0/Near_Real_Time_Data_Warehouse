@@ -1,160 +1,225 @@
+
 # Walmart Near-Real-Time Data Warehouse Prototype
 
-This is an academic project that simulates a near-real-time data warehouse.
+This project simulates a near-real-time data warehouse. It pulls in a fast-arriving stream of sales transactions, joins them with large on-disk master files, and loads the final cleaned dataset into MySQL. The highlight is a custom HYBRIDJOIN algorithm designed to handle this kind of stream-to-disk join efficiently (Please check the report for the reference paper from where this algorithm was picked).
 
-It uses a multi-threaded Python script to perform an "Extract, Transform, Load" (ETL) process. This script reads a fast-arriving "stream" of sales transactions, joins it with large "master" files on the disk, and loads the final, clean data into a MySQL database.
-
-The core of the project is the implementation of a specific HYBRIDJOIN algorithm, which is designed to handle this "stream-to-disk" join by loading the stream data into a hash table and probing it with partitions from the master files.
+A full GUI has now been added so you no longer have to run the project entirely through the terminal. The GUI wraps all steps, manages credentials, and executes the full pipeline with one click. Manual execution is still fully supported.
 
 ---
 
-## Project-Specific Assumptions
+## Project Assumptions
 
-This project runs on a few key assumptions you must be aware of:
+A few rules this project relies on:
 
-* **Ambiguous Price Data:** The `product_master_data.csv` file has store information, meaning one product can have multiple prices. The `transactional_data.csv` (the stream) does not say which store a sale happened at.
-* **The "As-Is" Solution:** This code (specifically `build_index.py`) proceeds by handling the ambiguity using a **"Last One Wins"** behavior. This means the price used for a sale will be the last price found for that product in the master file. This is not financially accurate, but it allows the ETL to run.
-* **Credentials:** The Python scripts (`populate_dimensions.py` and `hybrid_join.py`) and the `gui_runner.py` will ask for your MySQL credentials. They default to `root` and `meow` if you just press Enter, which is why **Step 1** is recommended.
+* **Price Ambiguity:** The product master file includes store-level pricing. The streamed transactions do not indicate store ID.
+* **Resolution Method:** The system resolves this by using a **last-one-wins** approach during indexing. Not financially perfect, but it keeps the ETL consistent for academic use.
+* **Credentials:**
 
----
-
-## Requirements (What You Need)
-
-Before you begin, you must have this software installed on your machine.
-
-1.  **MySQL Server (Version 8.0 or newer):**
-    * This is the database that will store all the data.
-    * Installing **MySQL Workbench** is recommended. It makes database management easier.
-    * Download Page: `https://dev.mysql.com/downloads/mysql/`
-
-2.  **Python (Version 3.10 or newer):**
-    * This is the programming language used to run the project. (3.10 is the minimum for the `|` type hint syntax used in `doubly_linked_list.py`).
-    * Download Page: `https://www.python.org/downloads/`
-    * **CRITICAL:** During installation, make sure to check the box that says **"Add Python to PATH"**.
-
-3.  **Project Files:**
-    * You need all **11 project files** in a single folder (e.g., `C:\DWBI_Project`):
-        1.  `customer_master_data.csv`
-        2.  `product_master_data.csv`
-        3.  `transactional_data.csv`
-        4.  `Create-DW.sql`
-        5.  `populate_dimensions.py`
-        6.  `build_index.py`
-        7.  `hybrid_join.py`
-        8.  `doubly_linked_list.py`
-        9.  `Run-Queries.sql`
-        10. **(NEW)** `sql_queries.py`
-        11. **(NEW)** `gui_runner.py`
+  * The GUI and Python scripts ask for MySQL credentials.
+  * If you just press Enter, they default to `root` and `meow`.
+  * You can either set your MySQL password to `meow` (Step 1) or type your real password into the GUI.
 
 ---
 
-## Step-by-Step Execution
+## Requirements
 
-Follow these steps in order. Do not skip any.
+Before running anything, make sure you have:
 
-### Step 1: Set Your MySQL Password
+### 1. MySQL Server (8.0 or newer)
 
-This step ensures your MySQL password matches the script's default (`meow`) for easy execution.
+Used as the main database.
+Workbench recommended for convenience.
 
-1.  Open **MySQL Workbench** and connect to your local database.
-2.  Open a new SQL editor.
-3.  Copy and paste the command below.
-4.  Execute it by clicking the lightning bolt (⚡) icon. This sets your `root` user's password to `meow`.
+Download: [https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
+
+### 2. Python 3.10 or newer
+
+Required for the project and type hints in the scripts.
+Ensure you check **Add Python to PATH** when installing.
+
+Download: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+
+### 3. Project Files (11 total)
+
+Place all files into one folder, for example:
+
+```
+C:\Near_Real_Time_Data_Warehouse
+```
+
+Files required:
+
+1. customer_master_data.csv
+2. product_master_data.csv
+3. transactional_data.csv
+4. Create-DW.sql
+5. populate_dimensions.py
+6. build_index.py
+7. hybrid_join.py
+8. doubly_linked_list.py
+9. Run-Queries.sql
+10. sql_queries.py
+11. gui_runner.py
+
+---
+
+## Step-by-Step Setup
+
+### Step 1: Set (or confirm) MySQL Password
+
+If you want everything to run smoothly with zero typing, change your root password to `meow`.
+
+In MySQL Workbench:
 
 ```sql
--- Sets the password for your 'root' user to 'meow'
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'meow';
 ```
 
-*(Note: If you don't want to change your password, you can just type your real password into the GUI in Step 4.)*
+If you do not want to change your password, just enter your actual password inside the GUI later.
 
-### Step 2: Create the Database Tables (DDL)
+---
 
-1.  Find the file `Create-DW.sql` in your project folder.
-2.  Open it, **copy the entire contents**, and paste it into your MySQL Workbench SQL editor.
-3.  Execute the entire script (click the lightning bolt icon).
-4.  When it's done, right-click the "SCHEMAS" panel on the left and click **"Refresh All"**. You should now see the `walmart` database.
+## Step 2: Create the Database Schema (DDL)
 
-*(Note: If you plan to use the GUI in Step 4, it will run this script for you. This step is only required for the manual process.)*
+You can skip this step if you plan to use the GUI, because the GUI executes the Create-DW script automatically.
 
-### Step 3: Install the Python Library
+Manual process:
 
-1.  Open your computer's **Command Prompt** (on Windows, search for "cmd") or **Terminal**.
-2.  Type the following command and press Enter:
+1. Open `Create-DW.sql` in MySQL Workbench.
+2. Copy the entire script.
+3. Execute it.
+4. Refresh your schema list. You should now see `walmart`.
 
-<!-- end list -->
+---
+
+## Step 3: Install Required Python Package
 
 ```bash
 python -m pip install mysql-connector-python
 ```
 
-### Step 4: Run the Project
+---
 
-You have two options to run the ETL pipeline. The GUI is the easiest and recommended way.
+## Step 4: Run the ETL Pipeline
 
-#### Option A (Recommended): The GUI Runner
+You now have **two** ways to run the pipeline.
 
-1.  In your Command Prompt/Terminal, navigate to your project folder:
-    ```bash
-    cd C:\Near_Real_Time_Data_Warehouse
-    ```
-2.  Run the GUI script:
-    ```bash
-    python gui_runner.py
-    ```
-3.  A window will open. If your password is not "meow", update the credentials in the "ETL Pipeline Runner" tab.
-4.  Click the **"RUN FULL PROJECT PIPELINE"** button.
-5.  This single click will automatically run Step 2 (Create-DW), `populate_dimensions.py`, `build_index.py`, and `hybrid_join.py` in the correct order. You can watch the progress in the log window.
-6.  When you see " === PIPELINE COMPLETED SUCCESSFULLY\! ===", the data is loaded.
+---
 
-#### Option B: Manual Terminal Mode
+### Option A: GUI Runner (Recommended)
 
-If you do not want to use the GUI, run the scripts one-by-one in your terminal:
+This is the easiest way. Everything is automated:
+
+1. Open Terminal/Command Prompt.
+2. Navigate to your project folder:
+
+   ```bash
+   cd C:\Near_Real_Time_Data_Warehouse
+   ```
+3. Run:
+
+   ```bash
+   python gui_runner.py
+   ```
+4. A window will open with multiple tabs:
+
+   * **ETL Pipeline Runner**
+   * **Database Setup (DDL)**
+   * **Data Analysis Queries**
+
+The GUI lets you enter MySQL credentials. If your password is not `meow`, simply type your real password in the fields.
+
+5. In the ETL tab, click:
+
+   **RUN FULL PROJECT PIPELINE**
+
+This single button automatically performs:
+
+* Running Create-DW.sql
+* populate_dimensions.py
+* build_index.py
+* hybrid_join.py
+
+The order is handled internally. Progress logs appear in the window.
+
+When it says:
+
+```
+=== PIPELINE COMPLETED SUCCESSFULLY! ===
+```
+
+you’re done.
+
+---
+
+### Option B: Manual Terminal Execution
+
+If you prefer full control:
 
 ```bash
-# Make sure you are in your project folder (cd C:\Near_Real_Time_Data_Warehouse)
+cd C:\Near_Real_Time_Data_Warehouse
 
-# 1. This loads data into DimDate, DimCustomer, DimProduct, etc.
 python populate_dimensions.py
-
-# 2. This creates the 'partitions' folder and index files
 python build_index.py
-
-# 3. This is the main ETL. It will take several minutes.
 python hybrid_join.py
 ```
 
------
+The final step may take several minutes.
 
-## Step 5: Check Your Results & Run Queries
+---
 
-#### If you used the GUI:
+## Step 5: Run Analytical Queries
 
-1.  Click the **"Data Analysis Queries"** tab.
-2.  **First**, select the query `Q_VIEW: CREATE v_SalesAnalysis` and click **"Run Query"**. This is required before any other queries will work.
-3.  **Then**, select any other query (e.g., `Q1/Q11: Top 5 Products`) and click **"Run Query"** to see the results in the table.
+### If using the GUI:
 
-#### If you used the Manual Mode:
+1. Go to the **Data Analysis Queries** tab.
 
-1.  Go back to **MySQL Workbench**.
-2.  Open the `Run-Queries.sql` file.
-3.  **First**, execute the `CREATE OR REPLACE VIEW v_SalesAnalysis ...` command.
-4.  **Then**, you can execute any of the 20 analytical queries to see your results.
+2. Start by running:
 
------
+   **Q_VIEW: CREATE v_SalesAnalysis**
+
+   This creates the unified fact-dimension view required by other queries.
+
+3. Select any other query from the dropdown (e.g., Top 5 Products) and click **Run Query**.
+
+The results display directly in the table inside the GUI.
+
+### If running manually:
+
+1. Open `Run-Queries.sql` in MySQL Workbench.
+2. Execute the `CREATE OR REPLACE VIEW v_SalesAnalysis` block first.
+3. Then run any of the other analytical queries.
+
+---
 
 ## Troubleshooting
 
-  * **Error:** `python is not recognized as an internal or external command`
-      * **Fix:** Re-install Python with "Add to PATH" enabled.
-  * **Error:** `No module named 'mysql.connector'`
-      * **Fix:** Run `python -m pip install mysql-connector-python`.
-  * **Error:** `Access denied for user 'root'@'localhost'`
-      * **Fix:** Your MySQL password is not `meow`. Either run Step 1 or, in the GUI, just type your correct password into the "Password" box.
-  * **Error:** `[FATAL] Database 'walmart' does not exist.`
-      * **Fix:** **Step 2** was not executed correctly. Run the `Create-DW.sql` script or just use the GUI, which does it for you.
-  * **Error:** `[ERROR] Failed to populate DimDate...`
-      * **Fix:** You must be using **MySQL 8.0 or newer**.
-  * **Error:** `[FATAL] File not found: ... .csv`
-      * **Fix:** Your `.csv` and `.py` files are not all in the same folder.
-  * **If you stop `hybrid_join.py`:** Restarting is safe. The script uses `INSERT IGNORE` and will skip duplicates.
+**python is not recognized**
+Install Python again and enable Add to PATH.
+
+**ModuleNotFoundError: mysql.connector**
+Install the dependency:
+
+```bash
+python -m pip install mysql-connector-python
+```
+
+**Access denied for user 'root'@'localhost'**
+Your password isn’t `meow`.
+Fix options:
+
+* run Step 1, or
+* type your actual password into the GUI.
+
+**Database 'walmart' does not exist**
+The DDL was not executed. Run Create-DW.sql or let the GUI do it.
+
+**Failed to populate DimDate...**
+You need MySQL 8.0 or newer.
+
+**File not found… .csv**
+Your CSVs and Python files must all be in the same directory.
+
+**Stopped hybrid_join.py mid-run**
+Safe to restart. Inserts use `INSERT IGNORE` to avoid duplicates.
+
